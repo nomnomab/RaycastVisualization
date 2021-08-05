@@ -1,13 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
 	public static class VisualPhysics {
-		private const int ITERATIONS = 24;
-		private const float RADIANS_DELTA = 2 * Mathf.PI / ITERATIONS;
-
-		private static readonly float[] _precomputatedSin;
-		private static readonly float[] _precomputatedCos;
+		private static float[] _precomputatedSin;
+		private static float[] _precomputatedCos;
 
 		private static Vector3 _lastPositionHorizontal = Vector3.zero;
 		private static Vector3 _lastPositionVertical = Vector3.zero;
@@ -17,11 +15,26 @@ namespace Nomnom.RaycastVisualization {
 		private static Vector3 _cacheVertical2 = Vector3.zero;
 
 		static VisualPhysics() {
-			_precomputatedSin = new float[ITERATIONS + 1];
-			_precomputatedCos = new float[ITERATIONS + 1];
+			RecalculateComputations();
+		}
 
-			for (int i = 0; i <= ITERATIONS; i++) {
-				float d = RADIANS_DELTA * i;
+		public static void RecalculateComputations() {
+			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
+			float radiansDelta = 2 * Mathf.PI / iterations;
+			
+			_precomputatedSin ??= new float[iterations + 1];
+			_precomputatedCos ??= new float[iterations + 1];
+
+			if (_precomputatedSin.Length != iterations + 1) {
+				Array.Resize(ref _precomputatedSin, (int)iterations + 1);
+			}
+			
+			if (_precomputatedCos.Length != iterations + 1) {
+				Array.Resize(ref _precomputatedCos, (int)iterations + 1);
+			}
+
+			for (int i = 0; i <= iterations; i++) {
+				float d = radiansDelta * i;
 				_precomputatedSin[i] = Mathf.Sin(d);
 				_precomputatedCos[i] = Mathf.Cos(d);
 			}
@@ -1845,7 +1858,7 @@ namespace Nomnom.RaycastVisualization {
 				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
 			} else {
 				float distance = didHit ? hit.distance : GetMaxRayLength(maxDistance);
-				DrawArrow(origin, origin + direction * distance, color);
+				DrawArrow(origin, direction * distance, color);
 			}
 #endif
 
@@ -1876,7 +1889,7 @@ namespace Nomnom.RaycastVisualization {
 				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
 			} else {
 				float distance = GetMaxRayLength(maxDistance);
-				DrawArrow(origin, origin + direction * distance, color);
+				DrawArrow(origin, direction * distance, color);
 			}
 #endif
 
@@ -1886,11 +1899,13 @@ namespace Nomnom.RaycastVisualization {
 #if UNITY_EDITOR
 		private static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
 			const float RADIUS = 0.025f;
+			
+			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 
 			Vector3 lastPosition = Vector3.zero;
 			Vector3 cachePosition = Vector3.zero;
 
-			for (int i = 0; i <= ITERATIONS; i++) {
+			for (int i = 0; i <= iterations; i++) {
 				float sin = _precomputatedSin[i] * RADIUS;
 				float cos = _precomputatedCos[i] * RADIUS;
 
@@ -1915,10 +1930,12 @@ namespace Nomnom.RaycastVisualization {
 		private static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
 			const float RADIUS = 0.05f;
 
+			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
+
 			Vector3 lastPosition = Vector3.zero;
 			Vector3 cachePosition = Vector3.zero;
 
-			for (int i = 0; i <= ITERATIONS; i++) {
+			for (int i = 0; i <= settings.CircleResolution; i++) {
 				float sin = _precomputatedSin[i] * RADIUS;
 				float cos = _precomputatedCos[i] * RADIUS;
 
@@ -1939,11 +1956,13 @@ namespace Nomnom.RaycastVisualization {
 				lastPosition.z = cachePosition.z;
 			}
 
-			DrawArrow(center, upwardDirection.normalized * distance, GetDefaultColor(), 0.0075f);
+			DrawArrow(center, upwardDirection.normalized * distance, GetDefaultColor(), true, settings.ImpactCircleNormalArrowLength);
 		}
 
 		private static void DrawSphere(in Vector3 center, in float radius, in Color color) {
-			for (int i = 0; i <= ITERATIONS; i++) {
+			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
+			
+			for (int i = 0; i <= iterations; i++) {
 				float sin = _precomputatedSin[i] * radius;
 				float cos = _precomputatedCos[i] * radius;
 
@@ -2075,10 +2094,15 @@ namespace Nomnom.RaycastVisualization {
 			in Vector3 pos,
 			in Vector3 direction,
 			in Color color,
-			in float arrowHeadLength = 0.1f,
+			in bool useCustomLength = false,
+			float arrowHeadLength = 0.1f,
 			in float arrowHeadAngle = 20.0f,
 			in float arrowPosition = 1) {
 
+			if (!useCustomLength) {
+				arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
+			}
+			
 			Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
 			Vector3 backDir = Vector3.back * arrowHeadLength;
 			Vector3 right = rot * Quaternion.Euler(arrowHeadAngle, 0, 0) * backDir;

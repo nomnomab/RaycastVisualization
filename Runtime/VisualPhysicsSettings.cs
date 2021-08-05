@@ -8,6 +8,9 @@ namespace Nomnom.RaycastVisualization {
 		private const string _hitColorKey = "customSettings.HitColor";
 		private const string _noHitColorKey = "customSettings.NoHitColor";
 		private const string _defaultColorKey = "customSettings.DefaultColor";
+		private const string _circleResolutionKey = "customSettings.CircleResolution";
+		private const string _impactCircleNormalArrowLengthKey = "customSettings.ImpactCircleNormalArrowLength";
+		private const string _regularArrowLengthKey = "customSettings.RegularArrowLength";
 
 		private static NewCustomSettings _cachedSettings;
 
@@ -15,6 +18,9 @@ namespace Nomnom.RaycastVisualization {
 			public Color32 HitColor = Color.green;
 			public Color32 NoHitColor = Color.red;
 			public Color32 DefaultColor = Color.white;
+			public uint CircleResolution = 24;
+			public float ImpactCircleNormalArrowLength = 0.0075f;
+			public float RegularArrowLength = 0.1f;
 		}
 
 		public static NewCustomSettings GetEditorSettings() {
@@ -22,6 +28,9 @@ namespace Nomnom.RaycastVisualization {
 				HitColor = HexToColor(EditorPrefs.GetString(_hitColorKey, ColorToHex(Color.green))),
 				NoHitColor = HexToColor(EditorPrefs.GetString(_noHitColorKey, ColorToHex(Color.red))),
 				DefaultColor = HexToColor(EditorPrefs.GetString(_defaultColorKey, ColorToHex(Color.white))),
+				CircleResolution = (uint)EditorPrefs.GetInt(_circleResolutionKey, 24),
+				ImpactCircleNormalArrowLength = EditorPrefs.GetFloat(_impactCircleNormalArrowLengthKey, 0.0075f),
+				RegularArrowLength = EditorPrefs.GetFloat(_regularArrowLengthKey, 0.1f),
 			};
 		}
 
@@ -29,6 +38,9 @@ namespace Nomnom.RaycastVisualization {
 			EditorPrefs.SetString(_hitColorKey, ColorToHex(settings.HitColor));
 			EditorPrefs.SetString(_noHitColorKey, ColorToHex(settings.NoHitColor));
 			EditorPrefs.SetString(_defaultColorKey, ColorToHex(settings.DefaultColor));
+			EditorPrefs.SetInt(_circleResolutionKey, (int)settings.CircleResolution);
+			EditorPrefs.SetFloat(_impactCircleNormalArrowLengthKey, settings.ImpactCircleNormalArrowLength);
+			EditorPrefs.SetFloat(_regularArrowLengthKey, settings.RegularArrowLength);
 		}
 
 		private static string ColorToHex(Color32 color) {
@@ -53,6 +65,9 @@ namespace Nomnom.RaycastVisualization {
 		private static readonly GUIContent _hitColorLabel = new GUIContent("Hit Color", "The color used when a raycast hits a collider");
 		private static readonly GUIContent _noHitColorLabel = new GUIContent("No Hit Color", "The color used when a raycast does not hit a collider");
 		private static readonly GUIContent _defaultColorLabel = new GUIContent("Default Color", "The color used for anything that doesn't depend on a collision");
+		private static readonly GUIContent _circleResolutionLabel = new GUIContent("Circle Resolution", "How smooth the circles are in the visuals");
+		private static readonly GUIContent _hitCircleArrowLengthLabel = new GUIContent("Impact Arrow Length", "How long the arrow arms are");
+		private static readonly GUIContent _normalArrowLengthLabel = new GUIContent("Regular Arrow Length", "How long the arrow arms are");
 
 		public static void DrawSettings(VisualPhysicsSettingsHandler.NewCustomSettings settings) {
 			EditorGUI.indentLevel++;
@@ -61,6 +76,9 @@ namespace Nomnom.RaycastVisualization {
 			settings.HitColor = EditorGUILayout.ColorField(_hitColorLabel, settings.HitColor);
 			settings.NoHitColor = EditorGUILayout.ColorField(_noHitColorLabel, settings.NoHitColor);
 			settings.DefaultColor = EditorGUILayout.ColorField(_defaultColorLabel, settings.DefaultColor);
+			settings.CircleResolution = (uint)EditorGUILayout.IntSlider(_circleResolutionLabel, (int)settings.CircleResolution, 4, 128);
+			settings.ImpactCircleNormalArrowLength = EditorGUILayout.Slider(_hitCircleArrowLengthLabel, settings.ImpactCircleNormalArrowLength, 0.0001f, 0.05f);
+			settings.RegularArrowLength = EditorGUILayout.Slider(_normalArrowLengthLabel, settings.RegularArrowLength, 0.0001f, 0.5f);
 
 			EditorGUI.indentLevel--;
 		}
@@ -79,6 +97,7 @@ namespace Nomnom.RaycastVisualization {
 
 					if (EditorGUI.EndChangeCheck()) {
 						VisualPhysicsSettingsHandler.SetEditorSettings(settings);
+						VisualPhysics.RecalculateComputations();
 					}
 				},
 				keywords = new HashSet<string>(new [] { "Raycast", "Visualization" })
