@@ -273,12 +273,12 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			bool didHit = Physics.defaultPhysicsScene.CapsuleCast(point1, point2, radius, direction, out hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow((point1 + point2) * 0.5f, direction * distance, GetDefaultColor());
 
@@ -335,12 +335,12 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			bool didHit = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, out hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			Color color = GetColor(didHit);
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(origin, direction * distance, GetDefaultColor());
@@ -469,11 +469,11 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = hits != null && hits.Length > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -623,13 +623,12 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			bool didHit = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
-			
-#if UNITY_EDITOR
 
+#if UNITY_EDITOR
+			direction.Normalize();
 			Color color = GetColor(didHit);
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(center, direction * distance, GetDefaultColor());
@@ -706,11 +705,10 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			direction.Normalize();
-
 			RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = hits != null && hits.Length != 0;
 			Color color = GetColor(didHit);
 
@@ -839,11 +837,10 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			direction.Normalize();
-
 			int hitCount = Physics.defaultPhysicsScene.Raycast(origin, direction, results, maxDistance, layerMask, queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = hitCount > 0;
 			Color color = GetColor(didHit);
 
@@ -910,11 +907,10 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			direction.Normalize();
-
 			RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = hits != null && hits.Length != 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1085,9 +1081,9 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 closestPoint = Physics.ClosestPoint(point, collider, position, rotation);
 			Vector3 dir = closestPoint - point;
 			float length = dir.magnitude;
-			dir.Normalize();
-			
+
 #if UNITY_EDITOR
+			dir.Normalize();
 			DrawArrow(point, dir * length, GetDefaultColor());
 			DrawCircle(closestPoint, dir, GetColor(true));
 #endif
@@ -1204,9 +1200,8 @@ namespace Nomnom.RaycastVisualization {
 			int count = Physics.defaultPhysicsScene.CapsuleCast(point1, point2, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
 
-			direction.Normalize();
-
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = count > 0;
 			float distance = GetMaxRayLength(maxDistance);
 			Vector3 origin = (point1 + point2) * 0.5f;
@@ -1282,12 +1277,11 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			direction.Normalize();
-
 			int count = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = count > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1603,12 +1597,12 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			int count = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = count > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1693,12 +1687,12 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			direction.Normalize();
 
 			RaycastHit[] hits = Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			bool didHit = hits != null && hits.Length > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1846,12 +1840,11 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
 
-			direction.Normalize();
-
 			bool didHit = Physics.defaultPhysicsScene.Raycast(origin, direction, out RaycastHit hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			Color color = GetColor(didHit);
 
 			if (didHit) {
@@ -1877,12 +1870,11 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
 
-			direction.Normalize();
-
 			bool didHit = Physics.defaultPhysicsScene.Raycast(origin, direction, out hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
 #if UNITY_EDITOR
+			direction.Normalize();
 			Color color = GetColor(didHit);
 
 			if (didHit) {
