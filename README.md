@@ -1,5 +1,5 @@
 ﻿# Raycast Visualization
-This asset allows users to view raycasts as the user fire them.
+This asset allows users to view raycasts as the user fires them.
 
 ## Usage
 Replace `Physics.` with `VisualPhysics.` when firing a raycast to get a visual.
