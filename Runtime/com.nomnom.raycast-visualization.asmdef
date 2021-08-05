@@ -1,0 +1,14 @@
+{
+    "name": "com.nomnom.raycast-visualization",
+    "rootNamespace": "Nomnom.RaycastVisualization",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

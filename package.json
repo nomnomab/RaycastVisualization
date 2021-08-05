@@ -1,0 +1,19 @@
+{
+  "name": "com.nomnom.raycast-visualization",
+  "version": "1.0.0",
+  "displayName": "Nomnom's Raycast Visualization",
+  "description": "This asset allows users to view debug visuals for all raycast methods.",
+  "unity": "2020.3",
+  "unityRelease": "13f1",
+  "keywords": [
+    "nomnom",
+    "raycast",
+    "methods",
+    "visuals"
+  ],
+  "author": {
+    "name": "Andrew Burke",
+    "email": "nomnomab1@gmail.com"
+  },
+  "type": "library"
+}
