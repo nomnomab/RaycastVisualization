@@ -463,15 +463,16 @@ namespace Nomnom.RaycastVisualization {
 
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(origin, direction * distance, GetDefaultColor());
+			Color color = GetColor(didHit);
 
 			if (didHit) {
-				Color color = GetColor(didHit);
-
 				for (int i = 0; i < hits.Length; i++) {
 					ref RaycastHit hit = ref hits[i];
 
 					DrawSphere(origin + direction * hit.distance, radius, color);
 				}
+			} else {
+				DrawSphere(origin + direction * distance, radius, color);
 			}
 #endif
 
@@ -1276,13 +1277,16 @@ namespace Nomnom.RaycastVisualization {
 
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(origin, direction * distance, GetDefaultColor());
+			Color color = GetColor(didHit);
 
 			if (didHit) {
 				for (int i = 0; i < count; i++) {
 					ref RaycastHit hit = ref results[i];
 
-					DrawSphere(origin + direction * hit.distance, radius, Color.green);
+					DrawSphere(origin + direction * hit.distance, radius, color);
 				}
+			} else {
+				DrawSphere(origin + direction * distance, radius, color);
 			}
 #endif
 
@@ -1594,14 +1598,15 @@ namespace Nomnom.RaycastVisualization {
 
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(center, direction * distance, GetDefaultColor());
+			Color color = GetColor(didHit);
 
 			if (didHit) {
-				Color color = GetColor(didHit);
-
 				for (int i = 0; i < count; i++) {
 					ref RaycastHit hit = ref results[i];
 					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
 				}
+			} else {
+				DrawCube(center + direction * distance, halfExtents, orientation, color);
 			}
 #endif
 
@@ -1683,15 +1688,16 @@ namespace Nomnom.RaycastVisualization {
 
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(center, direction * distance, GetDefaultColor());
+			Color color = GetColor(didHit);
 
 			if (didHit) {
-				Color color = GetColor(didHit);
-
 				for (int i = 0; i < hits.Length; i++) {
 					ref RaycastHit hit = ref hits[i];
 
 					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
 				}
+			} else {
+				DrawCube(center + direction * distance, halfExtents, orientation, color);
 			}
 #endif
 
@@ -1834,7 +1840,7 @@ namespace Nomnom.RaycastVisualization {
 			Color color = GetColor(didHit);
 
 			if (didHit) {
-				Debug.DrawLine(origin, hit.point, color);
+				DrawLine(origin, hit.point, color);
 
 				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
 			} else {
@@ -1865,7 +1871,7 @@ namespace Nomnom.RaycastVisualization {
 			Color color = GetColor(didHit);
 
 			if (didHit) {
-				Debug.DrawLine(origin, hit.point, color);
+				DrawLine(origin, hit.point, color);
 
 				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
 			} else {
@@ -1906,7 +1912,7 @@ namespace Nomnom.RaycastVisualization {
 		}
 
 		private static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
-			const float RADIUS = 0.025f;
+			const float RADIUS = 0.05f;
 
 			Vector3 lastPosition = Vector3.zero;
 			Vector3 cachePosition = Vector3.zero;
@@ -1983,10 +1989,10 @@ namespace Nomnom.RaycastVisualization {
 				Vector3 point1Pos = point1 + dir;
 				Vector3 point2Pos = point2 + dir;
 
-				DrawLine(point1Pos + Vector3.forward * 0.5f, point2Pos + Vector3.forward * 0.5f, color);
-				DrawLine(point1Pos + Vector3.back * 0.5f, point2Pos + Vector3.back * 0.5f, color);
-				DrawLine(point1Pos + Vector3.right * 0.5f, point2Pos + Vector3.right * 0.5f, color);
-				DrawLine(point1Pos + Vector3.left * 0.5f, point2Pos + Vector3.left * 0.5f, color);
+				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
+				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
+				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
+				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
 
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
@@ -1996,10 +2002,10 @@ namespace Nomnom.RaycastVisualization {
 				Vector3 point1Pos = point1 + dir;
 				Vector3 point2Pos = point2 + dir;
 
-				DrawLine(point1Pos + Vector3.forward * 0.5f, point2Pos + Vector3.forward * 0.5f, color);
-				DrawLine(point1Pos + Vector3.back * 0.5f, point2Pos + Vector3.back * 0.5f, color);
-				DrawLine(point1Pos + Vector3.right * 0.5f, point2Pos + Vector3.right * 0.5f, color);
-				DrawLine(point1Pos + Vector3.left * 0.5f, point2Pos + Vector3.left * 0.5f, color);
+				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
+				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
+				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
+				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
@@ -2016,10 +2022,10 @@ namespace Nomnom.RaycastVisualization {
 				Vector3 point1Pos = point1 + dir;
 				Vector3 point2Pos = point2 + dir;
 
-				DrawLine(point1Pos + Vector3.forward * 0.5f, point2Pos + Vector3.forward * 0.5f, color);
-				DrawLine(point1Pos + Vector3.back * 0.5f, point2Pos + Vector3.back * 0.5f, color);
-				DrawLine(point1Pos + Vector3.right * 0.5f, point2Pos + Vector3.right * 0.5f, color);
-				DrawLine(point1Pos + Vector3.left * 0.5f, point2Pos + Vector3.left * 0.5f, color);
+				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
+				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
+				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
+				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
 
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
@@ -2029,10 +2035,10 @@ namespace Nomnom.RaycastVisualization {
 				Vector3 point1Pos = point1 + dir;
 				Vector3 point2Pos = point2 + dir;
 
-				DrawLine(point1Pos + Vector3.forward * 0.5f, point2Pos + Vector3.forward * 0.5f, color);
-				DrawLine(point1Pos + Vector3.back * 0.5f, point2Pos + Vector3.back * 0.5f, color);
-				DrawLine(point1Pos + Vector3.right * 0.5f, point2Pos + Vector3.right * 0.5f, color);
-				DrawLine(point1Pos + Vector3.left * 0.5f, point2Pos + Vector3.left * 0.5f, color);
+				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
+				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
+				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
+				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
