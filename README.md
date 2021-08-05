@@ -14,49 +14,49 @@ Replace `Physics.` with `VisualPhysics.` when firing a raycast to get a visual.
 
 ## Examples
 #### Raycast / Linecast
-![Raycast / Linecast](./Gifs/raycast.gif)
+![Raycast / Linecast](./Gifs~/raycast.gif)
 
 #### RaycastAll / RaycastNonAlloc
-![RaycastAll / RaycastNonAlloc](./Gifs/raycast_all.gif)
+![RaycastAll / RaycastNonAlloc](./Gifs~/raycast_all.gif)
 
 #### CapsuleCast
-![CapsuleCast](./Gifs/capsulecast.gif)
+![CapsuleCast](./Gifs~/capsulecast.gif)
 
 #### CapsuleCastAll / CapsuleCastNonAlloc
-![CapsuleCastAll / CapsuleCastNonAlloc](./Gifs/capsulecast_all.gif)
+![CapsuleCastAll / CapsuleCastNonAlloc](./Gifs~/capsulecast_all.gif)
 
 #### CheckCapsule
-![CheckCapsule](./Gifs/check_capsule.gif)
+![CheckCapsule](./Gifs~/check_capsule.gif)
 
 #### OverlapCapsule / OverlapCapsuleNonAlloc
-![OverlapCapsule / OverlapCapsuleNonAlloc](./Gifs/overlap_capsule.gif)
+![OverlapCapsule / OverlapCapsuleNonAlloc](./Gifs~/overlap_capsule.gif)
 
 #### BoxCast
-![BoxCast](./Gifs/boxcast.gif)
+![BoxCast](./Gifs~/boxcast.gif)
 
 #### BoxCastAll / BoxCastNonAlloc
-![BoxCastAll / BoxCastNonAlloc](./Gifs/boxcast_all.gif)
+![BoxCastAll / BoxCastNonAlloc](./Gifs~/boxcast_all.gif)
 
 #### CheckBox
-![CheckBox](./Gifs/check_box.gif)
+![CheckBox](./Gifs~/check_box.gif)
 
 #### OverlapBox / OverlapBoxNonAlloc
-![OverlapBox / OverlapBoxNonAlloc](./Gifs/overlap_box.gif)
+![OverlapBox / OverlapBoxNonAlloc](./Gifs~/overlap_box.gif)
 
 #### SphereCast
-![SphereCast](./Gifs/spherecast.gif)
+![SphereCast](./Gifs~/spherecast.gif)
 
 #### SphereCastAll / SphereCastNonAlloc
-![SphereCastAll / SphereCastNonAlloc](./Gifs/spherecast_all.gif)
+![SphereCastAll / SphereCastNonAlloc](./Gifs~/spherecast_all.gif)
 
 #### CheckSphere
-![CheckSphere](./Gifs/check_sphere.gif)
+![CheckSphere](./Gifs~/check_sphere.gif)
 
 #### OverlapSphere / OverlapSphereNonAlloc
-![OverlapSphere / OverlapSphereNonAlloc](./Gifs/overlap_sphere.gif)
+![OverlapSphere / OverlapSphereNonAlloc](./Gifs~/overlap_sphere.gif)
 
 #### Compute Penetration
-![Compute Penetration](./Gifs/compute_penetration.gif)
+![Compute Penetration](./Gifs~/compute_penetration.gif)
 
 #### Closest Point
-![Closest Point](./Gifs/closest_point.gif)
+![Closest Point](./Gifs~/closest_point.gif)
