@@ -1937,7 +1937,7 @@ namespace Nomnom.RaycastVisualization {
 
 				Quaternion rot = Quaternion.LookRotation(upwardDirection);
 				cachePosition = rot * cachePosition;
-				cachePosition += center;
+				cachePosition += center + upwardDirection * settings.CircleDistance;
 
 				if (i != 0) {
 					Debug.DrawLine(lastPosition, cachePosition, color);
