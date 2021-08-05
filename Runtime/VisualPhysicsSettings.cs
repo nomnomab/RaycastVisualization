@@ -77,7 +77,7 @@ namespace Nomnom.RaycastVisualization {
 		public static void DrawSettings(VisualPhysicsSettingsHandler.NewCustomSettings settings) {
 			EditorGUI.indentLevel++;
 			
-			EditorGUILayout.HelpBox("Upon color changes in the Editor, the scene needs to repaint or an object has to be moved to refresh the colors.", MessageType.Info);
+			EditorGUILayout.HelpBox("Upon changes, the scene needs to repaint or an object has to be moved to actually apply the changes.", MessageType.Info);
 			settings.HitColor = EditorGUILayout.ColorField(_hitColorLabel, settings.HitColor);
 			settings.NoHitColor = EditorGUILayout.ColorField(_noHitColorLabel, settings.NoHitColor);
 			settings.DefaultColor = EditorGUILayout.ColorField(_defaultColorLabel, settings.DefaultColor);
