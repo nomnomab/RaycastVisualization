@@ -263,6 +263,7 @@ namespace Nomnom.RaycastVisualization {
 			bool didHit = Physics.defaultPhysicsScene.CapsuleCast(point1, point2, radius, direction, out hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow((point1 + point2) * 0.5f, direction * distance, GetDefaultColor());
 
@@ -271,6 +272,7 @@ namespace Nomnom.RaycastVisualization {
 			if (didHit) {
 				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
 			}
+#endif
 
 			return didHit;
 		}
@@ -323,6 +325,7 @@ namespace Nomnom.RaycastVisualization {
 			bool didHit = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, out hit, maxDistance, layerMask,
 				queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			Color color = GetColor(didHit);
 			float distance = GetMaxRayLength(maxDistance);
 			DrawArrow(origin, direction * distance, GetDefaultColor());
@@ -333,6 +336,7 @@ namespace Nomnom.RaycastVisualization {
 			} else {
 				DrawSphere(origin + direction * distance, radius, color);
 			}
+#endif
 
 			return didHit;
 		}
@@ -454,6 +458,7 @@ namespace Nomnom.RaycastVisualization {
 
 			RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = hits != null && hits.Length > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -468,6 +473,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawSphere(origin + direction * hit.distance, radius, color);
 				}
 			}
+#endif
 
 			return hits;
 		}
@@ -605,6 +611,8 @@ namespace Nomnom.RaycastVisualization {
 
 			bool didHit = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
+			
+#if UNITY_EDITOR
 
 			Color color = GetColor(didHit);
 			float distance = GetMaxRayLength(maxDistance);
@@ -616,6 +624,7 @@ namespace Nomnom.RaycastVisualization {
 			} else {
 				DrawCube(center + direction * distance, halfExtents, orientation, color);
 			}
+#endif
 
 			return didHit;
 		}
@@ -685,6 +694,7 @@ namespace Nomnom.RaycastVisualization {
 
 			RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = hits != null && hits.Length != 0;
 			Color color = GetColor(didHit);
 
@@ -699,6 +709,7 @@ namespace Nomnom.RaycastVisualization {
 				ref RaycastHit hit = ref hits[i];
 				DrawNormalCircle(hit.point, hit.normal, color);
 			}
+#endif
 
 			return hits;
 		}
@@ -816,6 +827,7 @@ namespace Nomnom.RaycastVisualization {
 
 			int hitCount = Physics.defaultPhysicsScene.Raycast(origin, direction, results, maxDistance, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = hitCount > 0;
 			Color color = GetColor(didHit);
 
@@ -831,6 +843,7 @@ namespace Nomnom.RaycastVisualization {
 
 				DrawNormalCircle(hit.point, hit.normal, color);
 			}
+#endif
 
 			return hitCount;
 		}
@@ -885,6 +898,7 @@ namespace Nomnom.RaycastVisualization {
 
 			RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = hits != null && hits.Length != 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -900,6 +914,7 @@ namespace Nomnom.RaycastVisualization {
 			} else {
 				DrawCapsule(point1, point2, direction, radius, maxDistance, default, didHit);
 			}
+#endif
 
 			return hits;
 		}
@@ -954,6 +969,7 @@ namespace Nomnom.RaycastVisualization {
 
 			Collider[] colliders = Physics.OverlapCapsule(point0, point1, radius, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = colliders != null && colliders.Length > 0;
 
 			DrawCapsuleNoColor(point0, point1, Vector3.zero, radius, 0, default, didHit);
@@ -969,6 +985,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(center, dir, color);
 				}
 			}
+#endif
 
 			return colliders;
 		}
@@ -992,6 +1009,7 @@ namespace Nomnom.RaycastVisualization {
 
 			Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = colliders != null && colliders.Length > 0;
 
 			DrawSphere(position, radius, GetDefaultColor());
@@ -1006,6 +1024,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(position, dir, color);
 				}
 			}
+#endif
 
 			return colliders;
 		}
@@ -1030,14 +1049,16 @@ namespace Nomnom.RaycastVisualization {
 			bool isPenetrating = Physics.ComputePenetration(colliderA, positionA, rotationA, colliderB, positionB, rotationB, out direction,
 				out distance);
 
+#if UNITY_EDITOR
 			if (!isPenetrating) {
-				return false;
+				return isPenetrating;
 			}
 
 			Vector3 nearestPoint = Physics.ClosestPoint(positionA, colliderB, positionB, rotationB);
 			DrawNormalCircle(nearestPoint, -direction.normalized, Color.green, distance);
+#endif
 
-			return true;
+			return isPenetrating;
 		}
 
 		public static Vector3 ClosestPoint(
@@ -1049,9 +1070,11 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 dir = closestPoint - point;
 			float length = dir.magnitude;
 			dir.Normalize();
-
+			
+#if UNITY_EDITOR
 			DrawArrow(point, dir * length, GetDefaultColor());
 			DrawCircle(closestPoint, dir, GetColor(true));
+#endif
 
 			return closestPoint;
 		}
@@ -1078,6 +1101,7 @@ namespace Nomnom.RaycastVisualization {
 
 			bool didHit = numberHit > 0;
 
+#if UNITY_EDITOR
 			DrawSphere(position, radius, GetDefaultColor());
 
 			if (didHit) {
@@ -1091,6 +1115,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(position, dir, color);
 				}
 			}
+#endif
 
 			return numberHit;
 		}
@@ -1122,9 +1147,9 @@ namespace Nomnom.RaycastVisualization {
 			QueryTriggerInteraction queryTriggerInteraction) {
 
 			bool didHit = Physics.CheckSphere(position, radius, layerMask, queryTriggerInteraction);
-
+#if UNITY_EDITOR
 			DrawSphere(position, radius, GetColor(didHit));
-
+#endif
 			return didHit;
 		}
 
@@ -1165,6 +1190,7 @@ namespace Nomnom.RaycastVisualization {
 
 			direction.Normalize();
 
+#if UNITY_EDITOR
 			bool didHit = count > 0;
 			float distance = GetMaxRayLength(maxDistance);
 			Vector3 origin = (point1 + point2) * 0.5f;
@@ -1180,6 +1206,7 @@ namespace Nomnom.RaycastVisualization {
 			} else {
 				DrawCapsule(point1, point2, direction, radius, maxDistance, default, didHit);
 			}
+#endif
 
 			return count;
 		}
@@ -1244,6 +1271,7 @@ namespace Nomnom.RaycastVisualization {
 			int count = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = count > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1256,6 +1284,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawSphere(origin + direction * hit.distance, radius, Color.green);
 				}
 			}
+#endif
 
 			return count;
 		}
@@ -1350,9 +1379,9 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 			bool didHit = Physics.CheckCapsule(start, end, radius, layerMask, queryTriggerInteraction);
-
+#if UNITY_EDITOR
 			DrawCapsule(start, end, Vector3.zero, radius, 0, default, didHit);
-
+#endif
 			return didHit;
 		}
 
@@ -1384,9 +1413,9 @@ namespace Nomnom.RaycastVisualization {
 			QueryTriggerInteraction queryTriggerInteraction) {
 
 			bool didHit = Physics.CheckBox(center, halfExtents, orientation, layermask, queryTriggerInteraction);
-
+#if UNITY_EDITOR
 			DrawCube(center, halfExtents, orientation, GetColor(didHit));
-
+#endif
 			return didHit;
 		}
 
@@ -1428,6 +1457,7 @@ namespace Nomnom.RaycastVisualization {
 
 			bool didHit = colliders != null && colliders.Length > 0;
 
+#if UNITY_EDITOR
 			DrawCube(center, halfExtents, orientation, GetDefaultColor());
 
 			if (didHit) {
@@ -1440,6 +1470,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(center, dir, color);
 				}
 			}
+#endif
 
 			return colliders;
 		}
@@ -1486,6 +1517,7 @@ namespace Nomnom.RaycastVisualization {
 			QueryTriggerInteraction queryTriggerInteraction) {
 			int count = Physics.defaultPhysicsScene.OverlapBox(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = count > 0;
 
 			DrawCube(center, halfExtents, orientation, GetDefaultColor());
@@ -1501,6 +1533,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(center, dir, color);
 				}
 			}
+#endif
 
 			return count;
 		}
@@ -1556,6 +1589,7 @@ namespace Nomnom.RaycastVisualization {
 			int count = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = count > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1569,6 +1603,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
 				}
 			}
+#endif
 
 			return count;
 		}
@@ -1643,6 +1678,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] hits = Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
 
+#if UNITY_EDITOR
 			bool didHit = hits != null && hits.Length > 0;
 
 			float distance = GetMaxRayLength(maxDistance);
@@ -1657,6 +1693,7 @@ namespace Nomnom.RaycastVisualization {
 					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
 				}
 			}
+#endif
 
 			return hits;
 		}
@@ -1717,7 +1754,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 			int count = Physics.defaultPhysicsScene.OverlapCapsule(point0, point1, radius, results, layerMask, queryTriggerInteraction);
-
+			
+#if UNITY_EDITOR
 			bool didHit = count > 0;
 
 			DrawCapsuleNoColor(point0, point1, Vector3.zero, radius, 0, default, didHit);
@@ -1734,7 +1772,8 @@ namespace Nomnom.RaycastVisualization {
 					DrawArrow(center, dir, color);
 				}
 			}
-
+#endif
+			
 			return count;
 		}
 
@@ -1760,15 +1799,21 @@ namespace Nomnom.RaycastVisualization {
 		private static float GetMaxRayLength(float distance) => Mathf.Min(distance, 10000);
 
 		private static Color GetColor(bool value) {
+#if UNITY_EDITOR
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			return value ? settings.HitColor : settings.NoHitColor;
+#endif
+			return Color.white;
 		}
 
 		private static Color GetDefaultColor() {
+#if UNITY_EDITOR
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			return settings.DefaultColor;
+#endif
+			return Color.white;
 		}
 
 		private static bool RaycastNoHit(
