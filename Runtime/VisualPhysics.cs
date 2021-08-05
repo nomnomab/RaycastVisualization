@@ -14,6 +14,7 @@ namespace Nomnom.RaycastVisualization {
 		private static Vector3 _cacheVertical = Vector3.zero;
 		private static Vector3 _cacheVertical2 = Vector3.zero;
 
+#if UNITY_EDITOR
 		static VisualPhysics() {
 			RecalculateComputations();
 		}
@@ -39,6 +40,7 @@ namespace Nomnom.RaycastVisualization {
 				_precomputatedCos[i] = Mathf.Cos(d);
 			}
 		}
+#endif
 
 		// Raycasts
 
