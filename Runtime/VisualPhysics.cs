@@ -1922,16 +1922,14 @@ namespace Nomnom.RaycastVisualization {
 		}
 
 		private static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
-			const float RADIUS = 0.05f;
-
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			Vector3 lastPosition = Vector3.zero;
 			Vector3 cachePosition = Vector3.zero;
 
 			for (int i = 0; i <= settings.CircleResolution; i++) {
-				float sin = _precomputatedSin[i] * RADIUS;
-				float cos = _precomputatedCos[i] * RADIUS;
+				float sin = _precomputatedSin[i] * settings.CircleRadius;
+				float cos = _precomputatedCos[i] * settings.CircleRadius;
 
 				cachePosition.x = cos;
 				cachePosition.y = sin;

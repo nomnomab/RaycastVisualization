@@ -9,6 +9,7 @@ namespace Nomnom.RaycastVisualization {
 		private const string _noHitColorKey = "customSettings.NoHitColor";
 		private const string _defaultColorKey = "customSettings.DefaultColor";
 		private const string _circleResolutionKey = "customSettings.CircleResolution";
+		private const string _circleRadiusKey = "customSettings.CircleRadius";
 		private const string _impactCircleNormalArrowLengthKey = "customSettings.ImpactCircleNormalArrowLength";
 		private const string _regularArrowLengthKey = "customSettings.RegularArrowLength";
 
@@ -21,6 +22,7 @@ namespace Nomnom.RaycastVisualization {
 			public uint CircleResolution = 24;
 			public float ImpactCircleNormalArrowLength = 0.0075f;
 			public float RegularArrowLength = 0.1f;
+			public float CircleRadius = 0.025f;
 		}
 
 		public static NewCustomSettings GetEditorSettings() {
@@ -29,6 +31,7 @@ namespace Nomnom.RaycastVisualization {
 				NoHitColor = HexToColor(EditorPrefs.GetString(_noHitColorKey, ColorToHex(Color.red))),
 				DefaultColor = HexToColor(EditorPrefs.GetString(_defaultColorKey, ColorToHex(Color.white))),
 				CircleResolution = (uint)EditorPrefs.GetInt(_circleResolutionKey, 24),
+				CircleRadius = EditorPrefs.GetFloat(_circleRadiusKey, 0.025f),
 				ImpactCircleNormalArrowLength = EditorPrefs.GetFloat(_impactCircleNormalArrowLengthKey, 0.0075f),
 				RegularArrowLength = EditorPrefs.GetFloat(_regularArrowLengthKey, 0.1f),
 			};
@@ -39,6 +42,7 @@ namespace Nomnom.RaycastVisualization {
 			EditorPrefs.SetString(_noHitColorKey, ColorToHex(settings.NoHitColor));
 			EditorPrefs.SetString(_defaultColorKey, ColorToHex(settings.DefaultColor));
 			EditorPrefs.SetInt(_circleResolutionKey, (int)settings.CircleResolution);
+			EditorPrefs.SetFloat(_circleRadiusKey, settings.CircleRadius);
 			EditorPrefs.SetFloat(_impactCircleNormalArrowLengthKey, settings.ImpactCircleNormalArrowLength);
 			EditorPrefs.SetFloat(_regularArrowLengthKey, settings.RegularArrowLength);
 		}
@@ -66,17 +70,19 @@ namespace Nomnom.RaycastVisualization {
 		private static readonly GUIContent _noHitColorLabel = new GUIContent("No Hit Color", "The color used when a raycast does not hit a collider");
 		private static readonly GUIContent _defaultColorLabel = new GUIContent("Default Color", "The color used for anything that doesn't depend on a collision");
 		private static readonly GUIContent _circleResolutionLabel = new GUIContent("Circle Resolution", "How smooth the circles are in the visuals");
+		private static readonly GUIContent _hitCircleRadius = new GUIContent("Impact Circle Radius", "How large the impact circle is");
 		private static readonly GUIContent _hitCircleArrowLengthLabel = new GUIContent("Impact Arrow Length", "How long the arrow arms are");
 		private static readonly GUIContent _normalArrowLengthLabel = new GUIContent("Regular Arrow Length", "How long the arrow arms are");
 
 		public static void DrawSettings(VisualPhysicsSettingsHandler.NewCustomSettings settings) {
 			EditorGUI.indentLevel++;
 			
-			EditorGUILayout.HelpBox("Upon color changes in the Editor, the scene needs to repaint or an object has to be moved to refresh the colors.", MessageType.Info);
+			EditorGUILayout.HelpBox("Upon changes, the scene needs to repaint or an object has to be moved to actually apply the changes.", MessageType.Info);
 			settings.HitColor = EditorGUILayout.ColorField(_hitColorLabel, settings.HitColor);
 			settings.NoHitColor = EditorGUILayout.ColorField(_noHitColorLabel, settings.NoHitColor);
 			settings.DefaultColor = EditorGUILayout.ColorField(_defaultColorLabel, settings.DefaultColor);
 			settings.CircleResolution = (uint)EditorGUILayout.IntSlider(_circleResolutionLabel, (int)settings.CircleResolution, 4, 128);
+			settings.CircleRadius = EditorGUILayout.Slider(_hitCircleRadius, settings.CircleRadius, 0.001f, 0.5f);
 			settings.ImpactCircleNormalArrowLength = EditorGUILayout.Slider(_hitCircleArrowLengthLabel, settings.ImpactCircleNormalArrowLength, 0.0001f, 0.05f);
 			settings.RegularArrowLength = EditorGUILayout.Slider(_normalArrowLengthLabel, settings.RegularArrowLength, 0.0001f, 0.5f);
 
