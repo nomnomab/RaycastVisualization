@@ -1883,6 +1883,7 @@ namespace Nomnom.RaycastVisualization {
 			return didHit;
 		}
 
+#if UNITY_EDITOR
 		private static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
 			const float RADIUS = 0.025f;
 
@@ -1981,7 +1982,6 @@ namespace Nomnom.RaycastVisualization {
 		private static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
 			in float maxDistance,
 			in RaycastHit hit, in bool didHit) {
-#if UNITY_EDITOR
 			Color color = GetDefaultColor();
 			
 			if (didHit) {
@@ -2009,12 +2009,10 @@ namespace Nomnom.RaycastVisualization {
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
-#endif
 		}
 
 		private static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius, in float maxDistance,
 			in RaycastHit hit, in bool didHit) {
-#if UNITY_EDITOR
 			Color color = GetColor(didHit);
 
 			if (didHit) {
@@ -2042,7 +2040,6 @@ namespace Nomnom.RaycastVisualization {
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
-#endif
 		}
 
 		private static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, Color color) {
@@ -2106,4 +2103,5 @@ namespace Nomnom.RaycastVisualization {
 			Debug.DrawRay(start, direction, color, 0, true);
 		}
 	}
+#endif
 }
