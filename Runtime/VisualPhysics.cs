@@ -2102,6 +2102,6 @@ namespace Nomnom.RaycastVisualization {
 		private static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
 			Debug.DrawRay(start, direction, color, 0, true);
 		}
-	}
 #endif
+	}
 }
