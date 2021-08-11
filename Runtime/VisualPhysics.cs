@@ -1,49 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
 	public static class VisualPhysics {
-		private static float[] _precomputatedSin;
-		private static float[] _precomputatedCos;
-
-		private static Vector3 _lastPositionHorizontal = Vector3.zero;
-		private static Vector3 _lastPositionVertical = Vector3.zero;
-		private static Vector3 _lastPositionVertical2 = Vector3.zero;
-		private static Vector3 _cacheHorizontal = Vector3.zero;
-		private static Vector3 _cacheVertical = Vector3.zero;
-		private static Vector3 _cacheVertical2 = Vector3.zero;
-
-#if UNITY_EDITOR
-		static VisualPhysics() {
-			RecalculateComputations();
-		}
-
-		public static void RecalculateComputations() {
-			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
-			float radiansDelta = 2 * Mathf.PI / iterations;
-			
-			_precomputatedSin ??= new float[iterations + 1];
-			_precomputatedCos ??= new float[iterations + 1];
-
-			if (_precomputatedSin.Length != iterations + 1) {
-				Array.Resize(ref _precomputatedSin, (int)iterations + 1);
-			}
-			
-			if (_precomputatedCos.Length != iterations + 1) {
-				Array.Resize(ref _precomputatedCos, (int)iterations + 1);
-			}
-
-			for (int i = 0; i <= iterations; i++) {
-				float d = radiansDelta * i;
-				_precomputatedSin[i] = Mathf.Sin(d);
-				_precomputatedCos[i] = Mathf.Cos(d);
-			}
-		}
-#endif
-
-		// Raycasts
-
 		/// <summary>
 		///   <para>Casts a ray, from point origin, in direction direction, of length maxDistance, against all colliders in the Scene.</para>
 		/// </summary>
@@ -63,19 +22,19 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			return RaycastNoHit(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Raycast.Run(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Raycast(Vector3 origin, Vector3 direction, float maxDistance, int layerMask) {
-			return RaycastNoHit(origin, direction, maxDistance, layerMask);
+			return ThreeD.Raycast.Run(origin, direction, maxDistance, layerMask);
 		}
 
 		public static bool Raycast(Vector3 origin, Vector3 direction, float maxDistance) {
-			return RaycastNoHit(origin, direction, maxDistance);
+			return ThreeD.Raycast.Run(origin, direction, maxDistance);
 		}
 
 		public static bool Raycast(Vector3 origin, Vector3 direction) {
-			return RaycastNoHit(origin, direction);
+			return ThreeD.Raycast.Run(origin, direction);
 		}
 
 		public static bool Raycast(
@@ -85,7 +44,7 @@ namespace Nomnom.RaycastVisualization {
 			float maxDistance,
 			int layerMask,
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return RaycastWithHit(origin, direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Raycast.Run(origin, direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Raycast(
@@ -94,7 +53,7 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hitInfo,
 			float maxDistance,
 			int layerMask) {
-			return RaycastWithHit(origin, direction, out hitInfo, maxDistance, layerMask);
+			return ThreeD.Raycast.Run(origin, direction, out hitInfo, maxDistance, layerMask);
 		}
 
 		public static bool Raycast(
@@ -102,11 +61,11 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			out RaycastHit hitInfo,
 			float maxDistance) {
-			return RaycastWithHit(origin, direction, out hitInfo, maxDistance);
+			return ThreeD.Raycast.Run(origin, direction, out hitInfo, maxDistance);
 		}
 
 		public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo) {
-			return RaycastWithHit(origin, direction, out hitInfo);
+			return ThreeD.Raycast.Run(origin, direction, out hitInfo);
 		}
 
 		/// <summary>
@@ -125,19 +84,19 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return RaycastNoHit(ray.origin, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Raycast(Ray ray, float maxDistance, int layerMask) {
-			return RaycastNoHit(ray.origin, ray.direction, maxDistance, layerMask);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, maxDistance, layerMask);
 		}
 
 		public static bool Raycast(Ray ray, float maxDistance) {
-			return RaycastNoHit(ray.origin, ray.direction, maxDistance);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, maxDistance);
 		}
 
 		public static bool Raycast(Ray ray) {
-			return RaycastNoHit(ray.origin, ray.direction);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction);
 		}
 
 		public static bool Raycast(
@@ -147,20 +106,20 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return RaycastWithHit(ray.origin, ray.direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance, int layerMask) {
-			return RaycastWithHit(ray.origin,
+			return ThreeD.Raycast.Run(ray.origin,
 				ray.direction, out hitInfo, maxDistance, layerMask);
 		}
 
 		public static bool Raycast(Ray ray, out RaycastHit hitInfo, float maxDistance) {
-			return RaycastWithHit(ray.origin, ray.direction, out hitInfo, maxDistance);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, out hitInfo, maxDistance);
 		}
 
 		public static bool Raycast(Ray ray, out RaycastHit hitInfo) {
-			return RaycastWithHit(ray.origin, ray.direction, out hitInfo);
+			return ThreeD.Raycast.Run(ray.origin, ray.direction, out hitInfo);
 		}
 
 		// Linecast
@@ -178,15 +137,15 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return Linecast(start, end, out _, layerMask, queryTriggerInteraction);
+			return ThreeD.Linecast.Run(start, end, out _, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Linecast(Vector3 start, Vector3 end, int layerMask) {
-			return Linecast(start, end, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Linecast.Run(start, end, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool Linecast(Vector3 start, Vector3 end) {
-			return Linecast(start, end, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Linecast.Run(start, end, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool Linecast(
@@ -196,16 +155,15 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			Vector3 direction = end - start;
-			return RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude, layerMask, queryTriggerInteraction);
+			return ThreeD.Linecast.Run(start, end, out hitInfo, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask) {
-			return RaycastWithHit(start, end, out hitInfo, layerMask);
+			return ThreeD.Linecast.Run(start, end, out hitInfo, layerMask);
 		}
 
 		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo) {
-			return RaycastWithHit(start, end, out hitInfo);
+			return ThreeD.Linecast.Run(start, end, out hitInfo);
 		}
 
 		// CapsuleCast
@@ -233,7 +191,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			return CapsuleCast(point1, point2, radius, direction, out _, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, out _, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool CapsuleCast(
@@ -243,7 +201,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			float maxDistance,
 			int layerMask) {
-			return CapsuleCast(point1, point2, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CapsuleCast(
@@ -252,7 +210,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			float maxDistance) {
-			return CapsuleCast(point1, point2, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CapsuleCast(
@@ -260,7 +218,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 point2,
 			float radius,
 			Vector3 direction) {
-			return CapsuleCast(point1, point2, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CapsuleCast(
@@ -274,22 +232,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			bool didHit = Physics.defaultPhysicsScene.CapsuleCast(point1, point2, radius, direction, out hit, maxDistance, layerMask,
-				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow((point1 + point2) * 0.5f, direction * distance, GetDefaultColor());
-
-			DrawCapsule(point1, point2, direction, radius, maxDistance, hit, didHit);
-
-			if (didHit) {
-				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
-			}
-#endif
-
-			return didHit;
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, out hit, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool CapsuleCast(
@@ -300,7 +243,7 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hit,
 			float maxDistance,
 			int layerMask) {
-			return CapsuleCast(point1, point2, radius, direction, out hit, maxDistance, layerMask,
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, out hit, maxDistance, layerMask,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -311,7 +254,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			out RaycastHit hit,
 			float maxDistance) {
-			return CapsuleCast(point1, point2, radius, direction, out hit, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, out hit, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CapsuleCast(
@@ -320,7 +263,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			out RaycastHit hit) {
-			return CapsuleCast(point1, point2, radius, direction, out hit, float.PositiveInfinity, -5,
+			return ThreeD.Capsulecast.Run(point1, point2, radius, direction, out hit, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -336,24 +279,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			bool didHit = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, out hit, maxDistance, layerMask,
-				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			Color color = GetColor(didHit);
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-
-			if (didHit) {
-				DrawNormalCircle(hit.point, hit.normal, color);
-				DrawSphere(origin + direction * hit.distance, radius, color);
-			} else {
-				DrawSphere(origin + direction * distance, radius, color);
-			}
-#endif
-
-			return didHit;
+			return ThreeD.Spherecast.Run(origin, radius, direction, out hit, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool SphereCast(
@@ -363,7 +289,7 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hit,
 			float maxDistance,
 			int layerMask) {
-			return SphereCast(origin, radius, direction, out hit, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(origin, radius, direction, out hit, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(
@@ -372,7 +298,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			out RaycastHit hit,
 			float maxDistance) {
-			return SphereCast(origin, radius, direction, out hit, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(origin, radius, direction, out hit, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(
@@ -380,7 +306,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			out RaycastHit hit) {
-			return SphereCast(origin, radius, direction, out hit, float.PositiveInfinity, -5,
+			return ThreeD.Spherecast.Run(origin, radius, direction, out hit, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -402,19 +328,19 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return SphereCast(ray.origin, radius, ray.direction, out RaycastHit _, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Spherecast.Run(ray.origin, radius, ray.direction, out RaycastHit _, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool SphereCast(Ray ray, float radius, float maxDistance, int layerMask) {
-			return SphereCast(ray, radius, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(Ray ray, float radius, float maxDistance) {
-			return SphereCast(ray, radius, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(Ray ray, float radius) {
-			return SphereCast(ray, radius, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(
@@ -425,7 +351,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return SphereCast(ray.origin, radius, ray.direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Spherecast.Run(ray.origin, radius, ray.direction, out hitInfo, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool SphereCast(
@@ -434,7 +360,7 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hitInfo,
 			float maxDistance,
 			int layerMask) {
-			return SphereCast(ray, radius, out hitInfo, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, out hitInfo, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(
@@ -442,11 +368,11 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			out RaycastHit hitInfo,
 			float maxDistance) {
-			return SphereCast(ray, radius, out hitInfo, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, out hitInfo, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool SphereCast(Ray ray, float radius, out RaycastHit hitInfo) {
-			return SphereCast(ray, radius, out hitInfo, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Spherecast.Run(ray, radius, out hitInfo, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -470,28 +396,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			RaycastHit[] hits = Physics.SphereCastAll(origin, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = hits != null && hits.Length > 0;
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				for (int i = 0; i < hits.Length; i++) {
-					ref RaycastHit hit = ref hits[i];
-
-					DrawSphere(origin + direction * hit.distance, radius, color);
-				}
-			} else {
-				DrawSphere(origin + direction * distance, radius, color);
-			}
-#endif
-
-			return hits;
+			return ThreeD.SpherecastAll.Run(origin, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static RaycastHit[] SphereCastAll(
@@ -500,7 +405,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			float maxDistance,
 			int layerMask) {
-			return SphereCastAll(origin, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(origin, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] SphereCastAll(
@@ -508,14 +413,14 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			float maxDistance) {
-			return SphereCastAll(origin, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(origin, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] SphereCastAll(
 			Vector3 origin,
 			float radius,
 			Vector3 direction) {
-			return SphereCastAll(origin, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(origin, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -533,7 +438,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return SphereCastAll(ray.origin, radius, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.SpherecastAll.Run(ray.origin, radius, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static RaycastHit[] SphereCastAll(
@@ -541,15 +446,15 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			float maxDistance,
 			int layerMask) {
-			return SphereCastAll(ray, radius, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(ray, radius, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] SphereCastAll(Ray ray, float radius, float maxDistance) {
-			return SphereCastAll(ray, radius, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(ray, radius, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] SphereCastAll(Ray ray, float radius) {
-			return SphereCastAll(ray, radius, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastAll.Run(ray, radius, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		// BoxCasts
@@ -577,7 +482,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			return BoxCast(center, halfExtents, direction, out _, orientation, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out _, orientation, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool BoxCast(
@@ -587,7 +492,7 @@ namespace Nomnom.RaycastVisualization {
 			Quaternion orientation,
 			float maxDistance,
 			int layerMask) {
-			return BoxCast(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool BoxCast(
@@ -596,7 +501,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			Quaternion orientation,
 			float maxDistance) {
-			return BoxCast(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool BoxCast(
@@ -604,12 +509,12 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Vector3 direction,
 			Quaternion orientation) {
-			return BoxCast(center, halfExtents, direction, orientation, float.PositiveInfinity, -5,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, orientation, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool BoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction) {
-			return BoxCast(center, halfExtents,
+			return ThreeD.Boxcast.Run(center, halfExtents,
 				direction, Quaternion.identity, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -624,24 +529,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			bool didHit = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			Color color = GetColor(didHit);
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(center, direction * distance, GetDefaultColor());
-
-			if (didHit) {
-				DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
-				DrawNormalCircle(hit.point, hit.normal, color);
-			} else {
-				DrawCube(center + direction * distance, halfExtents, orientation, color);
-			}
-#endif
-
-			return didHit;
 		}
 
 		public static bool BoxCast(
@@ -652,7 +541,7 @@ namespace Nomnom.RaycastVisualization {
 			Quaternion orientation,
 			float maxDistance,
 			int layerMask) {
-			return BoxCast(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out hit, orientation, maxDistance, layerMask,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -663,7 +552,7 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hit,
 			Quaternion orientation,
 			float maxDistance) {
-			return BoxCast(center, halfExtents, direction, out hit, orientation, maxDistance, -5,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out hit, orientation, maxDistance, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -673,7 +562,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			out RaycastHit hit,
 			Quaternion orientation) {
-			return BoxCast(center, halfExtents, direction, out hit, orientation, float.PositiveInfinity, -5,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out hit, orientation, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -682,7 +571,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Vector3 direction,
 			out RaycastHit hit) {
-			return BoxCast(center, halfExtents, direction, out hit, Quaternion.identity, float.PositiveInfinity, -5,
+			return ThreeD.Boxcast.Run(center, halfExtents, direction, out hit, Quaternion.identity, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -696,7 +585,6 @@ namespace Nomnom.RaycastVisualization {
 		/// <param name="maxDistance">The max distance the rayhit is allowed to be from the start of the ray.</param>
 		/// <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
 		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
-		/// <param name="layerMask"></param>
 		public static RaycastHit[] RaycastAll(
 			Vector3 origin,
 			Vector3 direction,
@@ -705,27 +593,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			RaycastHit[] hits = Physics.RaycastAll(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = hits != null && hits.Length != 0;
-			Color color = GetColor(didHit);
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-
-			if (!didHit) {
-				return hits;
-			}
-
-			for (int i = 0; i < hits.Length; i++) {
-				ref RaycastHit hit = ref hits[i];
-				DrawNormalCircle(hit.point, hit.normal, color);
-			}
-#endif
-
-			return hits;
+			return ThreeD.RaycastAll.Run(origin, direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static RaycastHit[] RaycastAll(
@@ -733,18 +601,18 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			float maxDistance,
 			int layerMask) {
-			return RaycastAll(origin, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(origin, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] RaycastAll(
 			Vector3 origin,
 			Vector3 direction,
 			float maxDistance) {
-			return RaycastAll(origin, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(origin, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] RaycastAll(Vector3 origin, Vector3 direction) {
-			return RaycastAll(origin, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(origin, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -763,19 +631,19 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return RaycastAll(ray.origin, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.RaycastAll.Run(ray.origin, ray.direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static RaycastHit[] RaycastAll(Ray ray, float maxDistance, int layerMask) {
-			return RaycastAll(ray.origin, ray.direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(ray.origin, ray.direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] RaycastAll(Ray ray, float maxDistance) {
-			return RaycastAll(ray.origin, ray.direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(ray.origin, ray.direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] RaycastAll(Ray ray) {
-			return RaycastAll(ray.origin, ray.direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastAll.Run(ray.origin, ray.direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -797,7 +665,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			return RaycastNonAlloc(ray.origin, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.RaycastNonAlloc.Run(ray.origin, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static int RaycastNonAlloc(
@@ -805,15 +673,15 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return RaycastNonAlloc(ray, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastNonAlloc.Run(ray, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int RaycastNonAlloc(Ray ray, RaycastHit[] results, float maxDistance) {
-			return RaycastNonAlloc(ray, results, maxDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastNonAlloc.Run(ray, results, maxDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int RaycastNonAlloc(Ray ray, RaycastHit[] results) {
-			return RaycastNonAlloc(ray, results, Mathf.Infinity, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastNonAlloc.Run(ray, results, Mathf.Infinity, Physics.DefaultRaycastLayers, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -837,28 +705,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			int hitCount = Physics.defaultPhysicsScene.Raycast(origin, direction, results, maxDistance, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = hitCount > 0;
-			Color color = GetColor(didHit);
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-
-			if (!didHit) {
-				return hitCount;
-			}
-
-			for (int i = 0; i < hitCount; i++) {
-				ref RaycastHit hit = ref results[i];
-
-				DrawNormalCircle(hit.point, hit.normal, color);
-			}
-#endif
-
-			return hitCount;
+			return ThreeD.RaycastNonAlloc.Run(origin, direction, results, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static int RaycastNonAlloc(
@@ -867,7 +714,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return RaycastNonAlloc(origin, direction, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.RaycastNonAlloc.Run(origin, direction, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int RaycastNonAlloc(
@@ -875,12 +722,12 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			RaycastHit[] results,
 			float maxDistance) {
-			return RaycastNonAlloc(origin, direction, results, maxDistance, Physics.DefaultRaycastLayers,
+			return ThreeD.RaycastNonAlloc.Run(origin, direction, results, maxDistance, Physics.DefaultRaycastLayers,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int RaycastNonAlloc(Vector3 origin, Vector3 direction, RaycastHit[] results) {
-			return RaycastNonAlloc(origin, direction, results, Mathf.Infinity, Physics.DefaultRaycastLayers,
+			return ThreeD.RaycastNonAlloc.Run(origin, direction, results, Mathf.Infinity, Physics.DefaultRaycastLayers,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -907,28 +754,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			RaycastHit[] hits = Physics.CapsuleCastAll(point1, point2, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = hits != null && hits.Length != 0;
-
-			float distance = GetMaxRayLength(maxDistance);
-			Vector3 origin = (point1 + point2) * 0.5f;
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-
-			if (didHit) {
-				foreach (RaycastHit hit in hits) {
-					DrawCapsule(point1, point2, direction, radius, maxDistance, hit, didHit);
-
-					DrawNormalCircle(hit.point, hit.normal, Color.green);
-				}
-			} else {
-				DrawCapsule(point1, point2, direction, radius, maxDistance, default, didHit);
-			}
-#endif
-
-			return hits;
+			return ThreeD.CapsulecastAll.Run(point1, point2, radius, direction, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static RaycastHit[] CapsuleCastAll(
@@ -938,7 +764,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			float maxDistance,
 			int layerMask) {
-			return CapsuleCastAll(point1, point2, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CapsulecastAll.Run(point1, point2, radius, direction, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] CapsuleCastAll(
@@ -947,7 +773,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			float maxDistance) {
-			return CapsuleCastAll(point1, point2, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CapsulecastAll.Run(point1, point2, radius, direction, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] CapsuleCastAll(
@@ -955,7 +781,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 point2,
 			float radius,
 			Vector3 direction) {
-			return CapsuleCastAll(point1, point2, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CapsulecastAll.Run(point1, point2, radius, direction, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapCapsule(
@@ -964,11 +790,11 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			int layerMask) {
 
-			return OverlapCapsule(point0, point1, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapCapsule.Run(point0, point1, radius, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapCapsule(Vector3 point0, Vector3 point1, float radius) {
-			return OverlapCapsule(point0, point1, radius, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapCapsule.Run(point0, point1, radius, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapCapsule(
@@ -979,27 +805,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			Collider[] colliders = Physics.OverlapCapsule(point0, point1, radius, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			bool didHit = colliders != null && colliders.Length > 0;
-
-			DrawCapsuleNoColor(point0, point1, Vector3.zero, radius, 0, default, didHit);
-
-			if (didHit) {
-				Vector3 center = (point0 + point1) * 0.5f;
-				Color color = GetColor(didHit);
-
-				foreach (Collider collider in colliders) {
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(center, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - center;
-					DrawArrow(center, dir, color);
-				}
-			}
-#endif
-
-			return colliders;
+			return ThreeD.OverlapCapsule.Run(point0, point1, radius, layerMask, queryTriggerInteraction);
 		}
 
 		/// <summary>
@@ -1019,34 +825,15 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			bool didHit = colliders != null && colliders.Length > 0;
-
-			DrawSphere(position, radius, GetDefaultColor());
-
-			if (didHit) {
-				Color color = GetColor(didHit);
-
-				foreach (Collider collider in colliders) {
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(position, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - position;
-					DrawArrow(position, dir, color);
-				}
-			}
-#endif
-
-			return colliders;
+			return ThreeD.OverlapSphere.Run(position, radius, layerMask, queryTriggerInteraction);
 		}
 
 		public static Collider[] OverlapSphere(Vector3 position, float radius, int layerMask) {
-			return OverlapSphere(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapSphere.Run(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapSphere(Vector3 position, float radius) {
-			return OverlapSphere(position, radius, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapSphere.Run(position, radius, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool ComputePenetration(
@@ -1057,20 +844,9 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 positionB,
 			Quaternion rotationB,
 			out Vector3 direction,
-			out float distance) {
-			bool isPenetrating = Physics.ComputePenetration(colliderA, positionA, rotationA, colliderB, positionB, rotationB, out direction,
+			out float distance) { 
+			return ThreeD.ComputePenetration.Run(colliderA, positionA, rotationA, colliderB, positionB, rotationB, out direction,
 				out distance);
-
-#if UNITY_EDITOR
-			if (!isPenetrating) {
-				return isPenetrating;
-			}
-
-			Vector3 nearestPoint = Physics.ClosestPoint(positionA, colliderB, positionB, rotationB);
-			DrawNormalCircle(nearestPoint, -direction.normalized, Color.green, distance);
-#endif
-
-			return isPenetrating;
 		}
 
 		public static Vector3 ClosestPoint(
@@ -1078,17 +854,7 @@ namespace Nomnom.RaycastVisualization {
 			Collider collider,
 			Vector3 position,
 			Quaternion rotation) {
-			Vector3 closestPoint = Physics.ClosestPoint(point, collider, position, rotation);
-			Vector3 dir = closestPoint - point;
-			float length = dir.magnitude;
-
-#if UNITY_EDITOR
-			dir.Normalize();
-			DrawArrow(point, dir * length, GetDefaultColor());
-			DrawCircle(closestPoint, dir, GetColor(true));
-#endif
-
-			return closestPoint;
+			return ThreeD.ClosestPoint.Run(point, collider, position, rotation);
 		}
 
 		/// <summary>
@@ -1109,27 +875,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			int numberHit = Physics.defaultPhysicsScene.OverlapSphere(position, radius, results, layerMask, queryTriggerInteraction);
-
-			bool didHit = numberHit > 0;
-
-#if UNITY_EDITOR
-			DrawSphere(position, radius, GetDefaultColor());
-
-			if (didHit) {
-				Color color = GetColor(didHit);
-
-				for (int i = 0; i < numberHit; i++) {
-					Collider collider = results[i];
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(position, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - position;
-					DrawArrow(position, dir, color);
-				}
-			}
-#endif
-
-			return numberHit;
+			return ThreeD.OverlapSphereNonAlloc.Run(position, radius, results, layerMask, queryTriggerInteraction);
 		}
 
 		public static int OverlapSphereNonAlloc(
@@ -1137,11 +883,11 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Collider[] results,
 			int layerMask) {
-			return OverlapSphereNonAlloc(position, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapSphereNonAlloc.Run(position, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int OverlapSphereNonAlloc(Vector3 position, float radius, Collider[] results) {
-			return OverlapSphereNonAlloc(position, radius, results, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapSphereNonAlloc.Run(position, radius, results, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1158,19 +904,15 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			bool didHit = Physics.CheckSphere(position, radius, layerMask, queryTriggerInteraction);
-#if UNITY_EDITOR
-			DrawSphere(position, radius, GetColor(didHit));
-#endif
-			return didHit;
+			return ThreeD.CheckSphere.Run(position, radius, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool CheckSphere(Vector3 position, float radius, int layerMask) {
-			return CheckSphere(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckSphere.Run(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CheckSphere(Vector3 position, float radius) {
-			return CheckSphere(position, radius, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckSphere.Run(position, radius, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1197,29 +939,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			int count = Physics.defaultPhysicsScene.CapsuleCast(point1, point2, radius, direction, results, maxDistance, layerMask,
+			return ThreeD.CapsuleCastNonAlloc.Run(point1, point2, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = count > 0;
-			float distance = GetMaxRayLength(maxDistance);
-			Vector3 origin = (point1 + point2) * 0.5f;
-
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-
-			if (didHit) {
-				for (int i = 0; i < count; i++) {
-					ref RaycastHit hit = ref results[i];
-					DrawCapsule(point1, point2, direction, radius, maxDistance, hit, didHit);
-					DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
-				}
-			} else {
-				DrawCapsule(point1, point2, direction, radius, maxDistance, default, didHit);
-			}
-#endif
-
-			return count;
 		}
 
 		public static int CapsuleCastNonAlloc(
@@ -1230,7 +951,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return CapsuleCastNonAlloc(point1, point2, radius, direction, results, maxDistance, layerMask,
+			return ThreeD.CapsuleCastNonAlloc.Run(point1, point2, radius, direction, results, maxDistance, layerMask,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1241,7 +962,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			RaycastHit[] results,
 			float maxDistance) {
-			return CapsuleCastNonAlloc(point1, point2, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CapsuleCastNonAlloc.Run(point1, point2, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int CapsuleCastNonAlloc(
@@ -1250,7 +971,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			RaycastHit[] results) {
-			return CapsuleCastNonAlloc(point1, point2, radius, direction, results, float.PositiveInfinity, -5,
+			return ThreeD.CapsuleCastNonAlloc.Run(point1, point2, radius, direction, results, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1277,29 +998,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			int count = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, results, maxDistance, layerMask,
+			return ThreeD.SpherecastNonAlloc.Run(origin, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = count > 0;
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(origin, direction * distance, GetDefaultColor());
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				for (int i = 0; i < count; i++) {
-					ref RaycastHit hit = ref results[i];
-
-					DrawSphere(origin + direction * hit.distance, radius, color);
-				}
-			} else {
-				DrawSphere(origin + direction * distance, radius, color);
-			}
-#endif
-
-			return count;
 		}
 
 		public static int SphereCastNonAlloc(
@@ -1309,7 +1009,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return SphereCastNonAlloc(origin, radius, direction, results, maxDistance, layerMask,
+			return ThreeD.SpherecastNonAlloc.Run(origin, radius, direction, results, maxDistance, layerMask,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1319,7 +1019,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			RaycastHit[] results,
 			float maxDistance) {
-			return SphereCastNonAlloc(origin, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastNonAlloc.Run(origin, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int SphereCastNonAlloc(
@@ -1327,7 +1027,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Vector3 direction,
 			RaycastHit[] results) {
-			return SphereCastNonAlloc(origin, radius, direction, results, float.PositiveInfinity, -5,
+			return ThreeD.SpherecastNonAlloc.Run(origin, radius, direction, results, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1351,7 +1051,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return SphereCastNonAlloc(ray.origin, radius, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
+			return ThreeD.SpherecastNonAlloc.Run(ray.origin, radius, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
 		}
 
 		public static int SphereCastNonAlloc(
@@ -1360,7 +1060,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return SphereCastNonAlloc(ray, radius, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastNonAlloc.Run(ray, radius, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int SphereCastNonAlloc(
@@ -1368,11 +1068,11 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			RaycastHit[] results,
 			float maxDistance) {
-			return SphereCastNonAlloc(ray, radius, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastNonAlloc.Run(ray, radius, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int SphereCastNonAlloc(Ray ray, float radius, RaycastHit[] results) {
-			return SphereCastNonAlloc(ray, radius, results, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.SpherecastNonAlloc.Run(ray, radius, results, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1391,19 +1091,15 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			bool didHit = Physics.CheckCapsule(start, end, radius, layerMask, queryTriggerInteraction);
-#if UNITY_EDITOR
-			DrawCapsule(start, end, Vector3.zero, radius, 0, default, didHit);
-#endif
-			return didHit;
+			return ThreeD.CheckCapsule.Run(start, end, radius, layerMask, queryTriggerInteraction);
 		}
 
 		public static bool CheckCapsule(Vector3 start, Vector3 end, float radius, int layerMask) {
-			return CheckCapsule(start, end, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckCapsule.Run(start, end, radius, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CheckCapsule(Vector3 start, Vector3 end, float radius) {
-			return CheckCapsule(start, end, radius, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckCapsule.Run(start, end, radius, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1425,11 +1121,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			bool didHit = Physics.CheckBox(center, halfExtents, orientation, layermask, queryTriggerInteraction);
-#if UNITY_EDITOR
-			DrawCube(center, halfExtents, orientation, GetColor(didHit));
-#endif
-			return didHit;
+			return ThreeD.CheckBox.Run(center, halfExtents, orientation, layermask, queryTriggerInteraction);
 		}
 
 		public static bool CheckBox(
@@ -1437,15 +1129,15 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Quaternion orientation,
 			int layerMask) {
-			return CheckBox(center, halfExtents, orientation, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckBox.Run(center, halfExtents, orientation, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CheckBox(Vector3 center, Vector3 halfExtents, Quaternion orientation) {
-			return CheckBox(center, halfExtents, orientation, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckBox.Run(center, halfExtents, orientation, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static bool CheckBox(Vector3 center, Vector3 halfExtents) {
-			return CheckBox(center, halfExtents, Quaternion.identity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.CheckBox.Run(center, halfExtents, Quaternion.identity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1466,26 +1158,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			Collider[] colliders = Physics.OverlapBox(center, halfExtents, orientation, layerMask, queryTriggerInteraction);
-
-			bool didHit = colliders != null && colliders.Length > 0;
-
-#if UNITY_EDITOR
-			DrawCube(center, halfExtents, orientation, GetDefaultColor());
-
-			if (didHit) {
-				Color color = GetColor(didHit);
-
-				foreach (Collider collider in colliders) {
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(center, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - center;
-					DrawArrow(center, dir, color);
-				}
-			}
-#endif
-
-			return colliders;
+			return ThreeD.OverlapBox.Run(center, halfExtents, orientation, layerMask, queryTriggerInteraction);
 		}
 
 		public static Collider[] OverlapBox(
@@ -1493,18 +1166,18 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Quaternion orientation,
 			int layerMask) {
-			return OverlapBox(center, halfExtents, orientation, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBox.Run(center, halfExtents, orientation, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapBox(
 			Vector3 center,
 			Vector3 halfExtents,
 			Quaternion orientation) {
-			return OverlapBox(center, halfExtents, orientation, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBox.Run(center, halfExtents, orientation, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static Collider[] OverlapBox(Vector3 center, Vector3 halfExtents) {
-			return OverlapBox(center, halfExtents, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBox.Run(center, halfExtents, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1528,27 +1201,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("AllLayers")] int mask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			int count = Physics.defaultPhysicsScene.OverlapBox(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			bool didHit = count > 0;
-
-			DrawCube(center, halfExtents, orientation, GetDefaultColor());
-
-			if (didHit) {
-				Color color = GetColor(didHit);
-
-				for (int i = 0; i < count; i++) {
-					Collider collider = results[i];
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(center, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - center;
-					DrawArrow(center, dir, color);
-				}
-			}
-#endif
-
-			return count;
+			return ThreeD.OverlapBoxNonAlloc.Run(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
 		}
 
 		public static int OverlapBoxNonAlloc(
@@ -1557,7 +1210,7 @@ namespace Nomnom.RaycastVisualization {
 			Collider[] results,
 			Quaternion orientation,
 			int mask) {
-			return OverlapBoxNonAlloc(center, halfExtents, results, orientation, mask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBoxNonAlloc.Run(center, halfExtents, results, orientation, mask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int OverlapBoxNonAlloc(
@@ -1565,11 +1218,11 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Collider[] results,
 			Quaternion orientation) {
-			return OverlapBoxNonAlloc(center, halfExtents, results, orientation, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBoxNonAlloc.Run(center, halfExtents, results, orientation, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int OverlapBoxNonAlloc(Vector3 center, Vector3 halfExtents, Collider[] results) {
-			return OverlapBoxNonAlloc(center, halfExtents, results, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapBoxNonAlloc.Run(center, halfExtents, results, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
 		}
 
 		/// <summary>
@@ -1598,28 +1251,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			int count = Physics.defaultPhysicsScene.BoxCast(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
+			return ThreeD.BoxCastNonAlloc.Run(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = count > 0;
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(center, direction * distance, GetDefaultColor());
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				for (int i = 0; i < count; i++) {
-					ref RaycastHit hit = ref results[i];
-					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
-				}
-			} else {
-				DrawCube(center + direction * distance, halfExtents, orientation, color);
-			}
-#endif
-
-			return count;
 		}
 
 		public static int BoxCastNonAlloc(
@@ -1628,7 +1261,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			RaycastHit[] results,
 			Quaternion orientation) {
-			return BoxCastNonAlloc(center, halfExtents, direction, results, orientation, float.PositiveInfinity, -5,
+			return ThreeD.BoxCastNonAlloc.Run(center, halfExtents, direction, results, orientation, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1639,7 +1272,7 @@ namespace Nomnom.RaycastVisualization {
 			RaycastHit[] results,
 			Quaternion orientation,
 			float maxDistance) {
-			return BoxCastNonAlloc(center, halfExtents, direction, results, orientation, maxDistance, -5,
+			return ThreeD.BoxCastNonAlloc.Run(center, halfExtents, direction, results, orientation, maxDistance, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1651,7 +1284,7 @@ namespace Nomnom.RaycastVisualization {
 			Quaternion orientation,
 			float maxDistance,
 			int layerMask) {
-			return BoxCastNonAlloc(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
+			return ThreeD.BoxCastNonAlloc.Run(center, halfExtents, direction, results, orientation, maxDistance, layerMask,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1660,7 +1293,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Vector3 direction,
 			RaycastHit[] results) {
-			return BoxCastNonAlloc(center, halfExtents, direction, results, Quaternion.identity, float.PositiveInfinity, -5,
+			return ThreeD.BoxCastNonAlloc.Run(center, halfExtents, direction, results, Quaternion.identity, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1688,29 +1321,8 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
 
-			RaycastHit[] hits = Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask,
+			return ThreeD.BoxcastAll.Run(center, halfExtents, direction, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			bool didHit = hits != null && hits.Length > 0;
-
-			float distance = GetMaxRayLength(maxDistance);
-			DrawArrow(center, direction * distance, GetDefaultColor());
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				for (int i = 0; i < hits.Length; i++) {
-					ref RaycastHit hit = ref hits[i];
-
-					DrawCube(center + direction * hit.distance, halfExtents, orientation, color);
-				}
-			} else {
-				DrawCube(center + direction * distance, halfExtents, orientation, color);
-			}
-#endif
-
-			return hits;
 		}
 
 		public static RaycastHit[] BoxCastAll(
@@ -1720,7 +1332,7 @@ namespace Nomnom.RaycastVisualization {
 			Quaternion orientation,
 			float maxDistance,
 			int layerMask) {
-			return BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.BoxcastAll.Run(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] BoxCastAll(
@@ -1729,7 +1341,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 direction,
 			Quaternion orientation,
 			float maxDistance) {
-			return BoxCastAll(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.BoxcastAll.Run(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] BoxCastAll(
@@ -1737,14 +1349,14 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 halfExtents,
 			Vector3 direction,
 			Quaternion orientation) {
-			return BoxCastAll(center, halfExtents, direction, orientation, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.BoxcastAll.Run(center, halfExtents, direction, orientation, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction) {
-			return BoxCastAll(center, halfExtents, direction, Quaternion.identity, float.PositiveInfinity, -5,
+			return ThreeD.BoxcastAll.Run(center, halfExtents, direction, Quaternion.identity, float.PositiveInfinity, -5,
 				QueryTriggerInteraction.UseGlobal);
 		}
 
@@ -1768,28 +1380,7 @@ namespace Nomnom.RaycastVisualization {
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			int count = Physics.defaultPhysicsScene.OverlapCapsule(point0, point1, radius, results, layerMask, queryTriggerInteraction);
-			
-#if UNITY_EDITOR
-			bool didHit = count > 0;
-
-			DrawCapsuleNoColor(point0, point1, Vector3.zero, radius, 0, default, didHit);
-
-			if (didHit) {
-				Vector3 center = (point0 + point1) * 0.5f;
-				Color color = GetColor(didHit);
-
-				for (int i = 0; i < count; i++) {
-					Collider collider = results[i];
-					Vector3 colliderPos = collider.transform.position;
-					Vector3 closestPoint = Physics.ClosestPoint(center, collider, colliderPos, collider.transform.rotation);
-					Vector3 dir = closestPoint - center;
-					DrawArrow(center, dir, color);
-				}
-			}
-#endif
-			
-			return count;
+			return ThreeD.OverlapCapsuleNonAlloc.Run(point0, point1, radius, results, layerMask, queryTriggerInteraction);
 		}
 
 		public static int OverlapCapsuleNonAlloc(
@@ -1798,7 +1389,7 @@ namespace Nomnom.RaycastVisualization {
 			float radius,
 			Collider[] results,
 			int layerMask) {
-			return OverlapCapsuleNonAlloc(point0, point1, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapCapsuleNonAlloc.Run(point0, point1, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
 		}
 
 		public static int OverlapCapsuleNonAlloc(
@@ -1806,318 +1397,7 @@ namespace Nomnom.RaycastVisualization {
 			Vector3 point1,
 			float radius,
 			Collider[] results) {
-			return OverlapCapsuleNonAlloc(point0, point1, radius, results, -1, QueryTriggerInteraction.UseGlobal);
+			return ThreeD.OverlapCapsuleNonAlloc.Run(point0, point1, radius, results, -1, QueryTriggerInteraction.UseGlobal);
 		}
-
-		// other
-
-		private static float GetMaxRayLength(float distance) => Mathf.Min(distance, 10000);
-
-		private static Color GetColor(bool value) {
-#if UNITY_EDITOR
-			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
-
-			return value ? settings.HitColor : settings.NoHitColor;
-#endif
-			return Color.white;
-		}
-
-		private static Color GetDefaultColor() {
-#if UNITY_EDITOR
-			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
-
-			return settings.DefaultColor;
-#endif
-			return Color.white;
-		}
-
-		private static bool RaycastNoHit(
-			Vector3 origin,
-			Vector3 direction,
-			[DefaultValue("Mathf.Infinity")] float maxDistance = float.PositiveInfinity,
-			[DefaultValue("Physics.DefaultRaycastLayers")]
-			int layerMask = -5,
-			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
-			QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-
-			bool didHit = Physics.defaultPhysicsScene.Raycast(origin, direction, out RaycastHit hit, maxDistance, layerMask,
-				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				DrawLine(origin, hit.point, color);
-
-				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
-			} else {
-				float distance = didHit ? hit.distance : GetMaxRayLength(maxDistance);
-				DrawArrow(origin, direction * distance, color);
-			}
-#endif
-
-			return didHit;
-		}
-
-		private static bool RaycastWithHit(
-			Vector3 origin,
-			Vector3 direction,
-			out RaycastHit hit,
-			[DefaultValue("Mathf.Infinity")] float maxDistance = float.PositiveInfinity,
-			[DefaultValue("Physics.DefaultRaycastLayers")]
-			int layerMask = -5,
-			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
-			QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-
-			bool didHit = Physics.defaultPhysicsScene.Raycast(origin, direction, out hit, maxDistance, layerMask,
-				queryTriggerInteraction);
-
-#if UNITY_EDITOR
-			direction.Normalize();
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				DrawLine(origin, hit.point, color);
-
-				DrawNormalCircle(hit.point, hit.normal, GetColor(didHit));
-			} else {
-				float distance = GetMaxRayLength(maxDistance);
-				DrawArrow(origin, direction * distance, color);
-			}
-#endif
-
-			return didHit;
-		}
-
-#if UNITY_EDITOR
-		private static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
-			const float RADIUS = 0.025f;
-			
-			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
-
-			Vector3 lastPosition = Vector3.zero;
-			Vector3 cachePosition = Vector3.zero;
-
-			for (int i = 0; i <= iterations; i++) {
-				float sin = _precomputatedSin[i] * RADIUS;
-				float cos = _precomputatedCos[i] * RADIUS;
-
-				cachePosition.x = cos;
-				cachePosition.y = sin;
-				cachePosition.z = 0;
-
-				Quaternion rot = Quaternion.LookRotation(upwardDirection);
-				cachePosition = rot * cachePosition;
-				cachePosition += center;
-
-				if (i != 0) {
-					Debug.DrawLine(lastPosition, cachePosition, color);
-				}
-
-				lastPosition.x = cachePosition.x;
-				lastPosition.y = cachePosition.y;
-				lastPosition.z = cachePosition.z;
-			}
-		}
-
-		private static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
-			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
-
-			Vector3 lastPosition = Vector3.zero;
-			Vector3 cachePosition = Vector3.zero;
-
-			for (int i = 0; i <= settings.CircleResolution; i++) {
-				float sin = _precomputatedSin[i] * settings.CircleRadius;
-				float cos = _precomputatedCos[i] * settings.CircleRadius;
-
-				cachePosition.x = cos;
-				cachePosition.y = sin;
-				cachePosition.z = 0;
-
-				Quaternion rot = Quaternion.LookRotation(upwardDirection);
-				cachePosition = rot * cachePosition;
-				cachePosition += center + upwardDirection * settings.CircleDistance;
-
-				if (i != 0) {
-					Debug.DrawLine(lastPosition, cachePosition, color);
-				}
-
-				lastPosition.x = cachePosition.x;
-				lastPosition.y = cachePosition.y;
-				lastPosition.z = cachePosition.z;
-			}
-
-			DrawArrow(center, upwardDirection.normalized * distance, GetDefaultColor(), true, settings.ImpactCircleNormalArrowLength);
-		}
-
-		private static void DrawSphere(in Vector3 center, in float radius, in Color color) {
-			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
-			
-			for (int i = 0; i <= iterations; i++) {
-				float sin = _precomputatedSin[i] * radius;
-				float cos = _precomputatedCos[i] * radius;
-
-				_cacheHorizontal.x = center.x + cos;
-				_cacheHorizontal.y = center.y + sin;
-				_cacheHorizontal.z = center.z;
-
-				_cacheVertical.x = center.x + cos;
-				_cacheVertical.y = center.y;
-				_cacheVertical.z = center.z + sin;
-
-				_cacheVertical2.x = center.x;
-				_cacheVertical2.y = center.y + cos;
-				_cacheVertical2.z = center.z + sin;
-
-				if (i != 0) {
-					DrawLine(_lastPositionHorizontal, _cacheHorizontal, color);
-					DrawLine(_lastPositionVertical, _cacheVertical, color);
-					DrawLine(_lastPositionVertical2, _cacheVertical2, color);
-				}
-
-				_lastPositionHorizontal.x = _cacheHorizontal.x;
-				_lastPositionHorizontal.y = _cacheHorizontal.y;
-				_lastPositionHorizontal.z = _cacheHorizontal.z;
-
-				_lastPositionVertical.x = _cacheVertical.x;
-				_lastPositionVertical.y = _cacheVertical.y;
-				_lastPositionVertical.z = _cacheVertical.z;
-
-				_lastPositionVertical2.x = _cacheVertical2.x;
-				_lastPositionVertical2.y = _cacheVertical2.y;
-				_lastPositionVertical2.z = _cacheVertical2.z;
-			}
-		}
-
-		private static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
-			in float maxDistance,
-			in RaycastHit hit, in bool didHit) {
-			Color color = GetDefaultColor();
-			
-			if (didHit) {
-				Vector3 dir = direction * hit.distance;
-				Vector3 point1Pos = point1 + dir;
-				Vector3 point2Pos = point2 + dir;
-
-				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
-				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
-				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
-				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
-
-				DrawSphere(point1Pos, radius, color);
-				DrawSphere(point2Pos, radius, color);
-			} else {
-				float rayDistance = GetMaxRayLength(maxDistance);
-				Vector3 dir = direction * rayDistance;
-				Vector3 point1Pos = point1 + dir;
-				Vector3 point2Pos = point2 + dir;
-
-				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
-				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
-				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
-				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
-				DrawSphere(point1Pos, radius, color);
-				DrawSphere(point2Pos, radius, color);
-			}
-		}
-
-		private static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius, in float maxDistance,
-			in RaycastHit hit, in bool didHit) {
-			Color color = GetColor(didHit);
-
-			if (didHit) {
-				Vector3 dir = direction * hit.distance;
-				Vector3 point1Pos = point1 + dir;
-				Vector3 point2Pos = point2 + dir;
-
-				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
-				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
-				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
-				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
-
-				DrawSphere(point1Pos, radius, color);
-				DrawSphere(point2Pos, radius, color);
-			} else {
-				float rayDistance = GetMaxRayLength(maxDistance);
-				Vector3 dir = direction * rayDistance;
-				Vector3 point1Pos = point1 + dir;
-				Vector3 point2Pos = point2 + dir;
-
-				DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color);
-				DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color);
-				DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color);
-				DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color);
-				DrawSphere(point1Pos, radius, color);
-				DrawSphere(point2Pos, radius, color);
-			}
-		}
-
-		private static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, Color color) {
-			Matrix4x4 matrix4X4 = Matrix4x4.TRS(center, rotation, size);
-
-			Vector3 blF = matrix4X4.MultiplyPoint(new Vector3(-1, -1, 1));
-			Vector3 brF = matrix4X4.MultiplyPoint(new Vector3(1, -1, 1));
-			Vector3 tlF = matrix4X4.MultiplyPoint(new Vector3(-1, 1, 1));
-			Vector3 trF = matrix4X4.MultiplyPoint(new Vector3(1, 1, 1));
-
-			Vector3 blB = matrix4X4.MultiplyPoint(new Vector3(-1, -1, -1));
-			Vector3 brB = matrix4X4.MultiplyPoint(new Vector3(1, -1, -1));
-			Vector3 tlB = matrix4X4.MultiplyPoint(new Vector3(-1, 1, -1));
-			Vector3 trB = matrix4X4.MultiplyPoint(new Vector3(1, 1, -1));
-
-			DrawLine(blF, brF, color);
-			DrawLine(brF, trF, color);
-			DrawLine(trF, tlF, color);
-			DrawLine(tlF, blF, color);
-
-			DrawLine(blB, brB, color);
-			DrawLine(brB, trB, color);
-			DrawLine(trB, tlB, color);
-			DrawLine(tlB, blB, color);
-
-			DrawLine(blB, blF, color);
-			DrawLine(brB, brF, color);
-			DrawLine(trB, trF, color);
-			DrawLine(tlB, tlF, color);
-		}
-
-		private static void DrawArrow(
-			in Vector3 pos,
-			in Vector3 direction,
-			in Color color,
-			in bool useCustomLength = false,
-			float arrowHeadLength = 0.1f,
-			in float arrowHeadAngle = 20.0f,
-			in float arrowPosition = 1) {
-
-			if (!useCustomLength) {
-				arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
-			}
-			
-			Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
-			Vector3 backDir = Vector3.back * arrowHeadLength;
-			Vector3 right = rot * Quaternion.Euler(arrowHeadAngle, 0, 0) * backDir;
-			Vector3 left = rot * Quaternion.Euler(-arrowHeadAngle, 0, 0) * backDir;
-			Vector3 up = rot * Quaternion.Euler(0, arrowHeadAngle, 0) * backDir;
-			Vector3 down = rot * Quaternion.Euler(0, -arrowHeadAngle, 0) * backDir;
-
-			Vector3 arrowTip = pos + direction * arrowPosition;
-
-			DrawRay(pos, direction, color);
-			DrawRay(arrowTip, right, color);
-			DrawRay(arrowTip, left, color);
-			DrawRay(arrowTip, up, color);
-			DrawRay(arrowTip, down, color);
-		}
-
-		private static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
-			Debug.DrawLine(start, end, color, 0, true);
-		}
-
-		private static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
-			Debug.DrawRay(start, direction, color, 0, true);
-		}
-#endif
 	}
 }

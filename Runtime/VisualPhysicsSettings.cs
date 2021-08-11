@@ -109,7 +109,7 @@ namespace Nomnom.RaycastVisualization {
 
 					if (EditorGUI.EndChangeCheck()) {
 						VisualPhysicsSettingsHandler.SetEditorSettings(settings);
-						VisualPhysics.RecalculateComputations();
+						VisualUtils.RecalculateComputations();
 					}
 				},
 				keywords = new HashSet<string>(new [] { "Raycast", "Visualization" })

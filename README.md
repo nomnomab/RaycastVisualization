@@ -11,6 +11,10 @@ Replace `Physics.` with `VisualPhysics.` when firing a raycast to get a visual.
 3. Click 'Add package from git URL'
 4. Provide the URL of this git repository: https://github.com/nomnomab/RaycastVisualization.git
 5. Click the 'add' button
+#### User Options
+The user options are located under `Edit/Preferences/RaycastVisualization`
+
+![Settings](./Gifs~/settings.png)
 
 ## Examples
 #### Raycast / Linecast
