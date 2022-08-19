@@ -1,10 +1,10 @@
 ﻿# Raycast Visualization
 This asset allows users to view raycasts as the user fires them.
 
-## Usage
-Replace `Physics.` with `VisualPhysics.` when firing a raycast to get a visual. 
+Currently only supports the 3d physics API (The 2D api will be coming soon).
 
-This class is housed within the `Nomnom.RaycastVisualization` namespace.
+## Usage
+Replace `Physics.` with `VisualPhysics.` when firing a raycast to get a visual.
 
 ## Installation
 #### Using Unity Package Manager

@@ -1,42 +1,71 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class Linecast {
-		public static bool Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Returns true if there is any collider intersecting the line between start and end.</para>
+		/// </summary>
+		/// <param name="start">Start point.</param>
+		/// <param name="end">End point.</param>
+		/// <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		public static bool Linecast(
 			Vector3 start,
 			Vector3 end,
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
-			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
-			QueryTriggerInteraction queryTriggerInteraction) {
-			return Run(start, end, out _, layerMask, queryTriggerInteraction);
+			[DefaultValue("QueryTriggerInteraction.UseGlobal")] QueryTriggerInteraction queryTriggerInteraction) {
+#if UNITY_EDITOR
+			return Linecast(start, end, out _, layerMask, queryTriggerInteraction);
+#else
+			return Physics.Linecast(start, end, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static bool Run(Vector3 start, Vector3 end, int layerMask) {
-			return Run(start, end, layerMask, QueryTriggerInteraction.UseGlobal);
+		public static bool Linecast(Vector3 start, Vector3 end, int layerMask) {
+#if UNITY_EDITOR
+			return Linecast(start, end, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.Linecast(start, end, layerMask);
+#endif
 		}
 
-		public static bool Run(Vector3 start, Vector3 end) {
-			return Run(start, end, -5, QueryTriggerInteraction.UseGlobal);
+		public static bool Linecast(Vector3 start, Vector3 end) {
+#if UNITY_EDITOR
+			return Linecast(start, end, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.Linecast(start, end);
+#endif
 		}
 
-		public static bool Run(
+		public static bool Linecast(
 			Vector3 start,
 			Vector3 end,
 			out RaycastHit hitInfo,
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
-			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
-			QueryTriggerInteraction queryTriggerInteraction) {
+			[DefaultValue("QueryTriggerInteraction.UseGlobal")] QueryTriggerInteraction queryTriggerInteraction) {
 			Vector3 direction = end - start;
-			return Raycast.RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude, layerMask, queryTriggerInteraction);
+#if UNITY_EDITOR
+			return RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude, layerMask, queryTriggerInteraction);
+#else
+			return Physics.Linecast(start, end, out hitInfo, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static bool Run(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask) {
-			return Raycast.RaycastWithHit(start, end, out hitInfo, layerMask);
+		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask) {
+#if UNITY_EDITOR
+			return RaycastWithHit(start, end, out hitInfo, layerMask);
+#else
+			return Physics.Linecast(start, end, out hitInfo, layerMask);
+#endif
 		}
 
-		public static bool Run(Vector3 start, Vector3 end, out RaycastHit hitInfo) {
-			return Raycast.RaycastWithHit(start, end, out hitInfo);
+		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo) {
+#if UNITY_EDITOR
+			return RaycastWithHit(start, end, out hitInfo);
+#else
+			return Physics.Linecast(start, end, out hitInfo);
+#endif
 		}
 	}
 }

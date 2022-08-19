@@ -1,18 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class OverlapSphere {
-		public static Collider[] Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Computes and stores colliders touching or inside the sphere.</para>
+		/// </summary>
+		/// <param name="position">Center of the sphere.</param>
+		/// <param name="radius">Radius of the sphere.</param>
+		/// <param name="layerMask">A defines which layers of colliders to include in the query.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		/// <returns>
+		///   <para>Returns an array with all colliders touching or inside the sphere.</para>
+		/// </returns>
+		public static Collider[] OverlapSphere(
 			Vector3 position,
 			float radius,
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-
-			Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
-
 #if UNITY_EDITOR
+			Collider[] colliders = Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
+			
 			bool didHit = colliders != null && colliders.Length > 0;
 
 			VisualUtils.DrawSphere(position, radius, VisualUtils.GetDefaultColor());
@@ -27,17 +36,27 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 					VisualUtils.DrawArrow(position, dir, color);
 				}
 			}
-#endif
 
 			return colliders;
+#else
+			return Physics.OverlapSphere(position, radius, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static Collider[] Run(Vector3 position, float radius, int layerMask) {
-			return Run(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+		public static Collider[] OverlapSphere(Vector3 position, float radius, int layerMask) {
+#if UNITY_EDITOR
+			return OverlapSphere(position, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapSphere(position, radius, layerMask);
+#endif
 		}
 
-		public static Collider[] Run(Vector3 position, float radius) {
-			return Run(position, radius, -1, QueryTriggerInteraction.UseGlobal);
+		public static Collider[] OverlapSphere(Vector3 position, float radius) {
+#if UNITY_EDITOR
+			return OverlapSphere(position, radius, -1, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapSphere(position, radius);
+#endif
 		}
 	}
 }

@@ -1,9 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class OverlapBoxNonAlloc {
-		public static int Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Find all colliders touching or inside of the given box, and store them into the buffer.</para>
+		/// </summary>
+		/// <param name="center">Center of the box.</param>
+		/// <param name="halfExtents">Half of the size of the box in each dimension.</param>
+		/// <param name="results">The buffer to store the results in.</param>
+		/// <param name="orientation">Rotation of the box.</param>
+		/// <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		/// <param name="mask"></param>
+		/// <returns>
+		///   <para>The amount of colliders stored in results.</para>
+		/// </returns>
+		public static int OverlapBoxNonAlloc(
 			Vector3 center,
 			Vector3 halfExtents,
 			Collider[] results,
@@ -11,9 +24,9 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			[DefaultValue("AllLayers")] int mask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			int count = Physics.defaultPhysicsScene.OverlapBox(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
-
 #if UNITY_EDITOR
+			int count = Physics.defaultPhysicsScene.OverlapBox(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
+			
 			bool didHit = count > 0;
 
 			VisualUtils.DrawCube(center, halfExtents, orientation, VisualUtils.GetDefaultColor());
@@ -29,29 +42,44 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 					VisualUtils.DrawArrow(center, dir, color);
 				}
 			}
-#endif
+			
 			return count;
+#else
+			return Physics.OverlapBoxNonAlloc(center, halfExtents, results, orientation, mask, queryTriggerInteraction);
+#endif
 		}
 
-		public static int Run(
+		public static int OverlapBoxNonAlloc(
 			Vector3 center,
 			Vector3 halfExtents,
 			Collider[] results,
 			Quaternion orientation,
 			int mask) {
-			return Run(center, halfExtents, results, orientation, mask, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return OverlapBoxNonAlloc(center, halfExtents, results, orientation, mask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapBoxNonAlloc(center, halfExtents, results, orientation, mask);
+#endif
 		}
 
-		public static int Run(
+		public static int OverlapBoxNonAlloc(
 			Vector3 center,
 			Vector3 halfExtents,
 			Collider[] results,
 			Quaternion orientation) {
-			return Run(center, halfExtents, results, orientation, -1, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return OverlapBoxNonAlloc(center, halfExtents, results, orientation, -1, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapBoxNonAlloc(center, halfExtents, results, orientation);
+#endif
 		}
 
-		public static int Run(Vector3 center, Vector3 halfExtents, Collider[] results) {
-			return Run(center, halfExtents, results, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
+		public static int OverlapBoxNonAlloc(Vector3 center, Vector3 halfExtents, Collider[] results) {
+#if UNITY_EDITOR
+			return OverlapBoxNonAlloc(center, halfExtents, results, Quaternion.identity, -1, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapBoxNonAlloc(center, halfExtents, results);
+#endif
 		}
 	}
 }

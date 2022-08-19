@@ -1,20 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class OverlapSphereNonAlloc {
-		public static int Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Computes and stores colliders touching or inside the sphere into the provided buffer.</para>
+		/// </summary>
+		/// <param name="position">Center of the sphere.</param>
+		/// <param name="radius">Radius of the sphere.</param>
+		/// <param name="results">The buffer to store the results into.</param>
+		/// <param name="layerMask">A defines which layers of colliders to include in the query.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		/// <returns>
+		///   <para>Returns the amount of colliders stored into the results buffer.</para>
+		/// </returns>
+		public static int OverlapSphereNonAlloc(
 			Vector3 position,
 			float radius,
 			Collider[] results,
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
+#if UNITY_EDITOR
 			int numberHit = Physics.defaultPhysicsScene.OverlapSphere(position, radius, results, layerMask, queryTriggerInteraction);
 
 			bool didHit = numberHit > 0;
-
-#if UNITY_EDITOR
+			
 			VisualUtils.DrawSphere(position, radius, VisualUtils.GetDefaultColor());
 
 			if (didHit) {
@@ -28,21 +39,31 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 					VisualUtils.DrawArrow(position, dir, color);
 				}
 			}
-#endif
 
 			return numberHit;
+#else
+			return Physics.OverlapSphereNonAlloc(position, radius, results, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static int Run(
+		public static int OverlapSphereNonAlloc(
 			Vector3 position,
 			float radius,
 			Collider[] results,
 			int layerMask) {
-			return Run(position, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return OverlapSphereNonAlloc(position, radius, results, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapSphereNonAlloc(position, radius, results, layerMask);
+#endif
 		}
 
-		public static int Run(Vector3 position, float radius, Collider[] results) {
-			return Run(position, radius, results, -1, QueryTriggerInteraction.UseGlobal);
+		public static int OverlapSphereNonAlloc(Vector3 position, float radius, Collider[] results) {
+#if UNITY_EDITOR
+			return OverlapSphereNonAlloc(position, radius, results, -1, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapSphereNonAlloc(position, radius, results);
+#endif
 		}
 	}
 }

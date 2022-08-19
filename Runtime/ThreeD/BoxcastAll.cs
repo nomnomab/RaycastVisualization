@@ -1,9 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class BoxcastAll {
-		public static RaycastHit[] Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Like Physics.BoxCast, but returns all hits.</para>
+		/// </summary>
+		/// <param name="center">Center of the box.</param>
+		/// <param name="halfExtents">Half the size of the box in each dimension.</param>
+		/// <param name="direction">The direction in which to cast the box.</param>
+		/// <param name="orientation">Rotation of the box.</param>
+		/// <param name="maxDistance">The max length of the cast.</param>
+		/// <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		/// <param name="layerMask"></param>
+		/// <returns>
+		///   <para>All colliders that were hit.</para>
+		/// </returns>
+		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction,
@@ -12,11 +26,10 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-
+#if UNITY_EDITOR
 			RaycastHit[] hits = Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
+			
 			direction.Normalize();
 			bool didHit = hits != null && hits.Length > 0;
 
@@ -33,44 +46,61 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			} else {
 				VisualUtils.DrawCube(center + direction * distance, halfExtents, orientation, color);
 			}
-#endif
-
+			
 			return hits;
+#else
+			return Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static RaycastHit[] Run(
+		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction,
 			Quaternion orientation,
 			float maxDistance,
 			int layerMask) {
-			return Run(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance, layerMask);
+#endif
 		}
 
-		public static RaycastHit[] Run(
+		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction,
 			Quaternion orientation,
 			float maxDistance) {
-			return Run(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return BoxCastAll(center, halfExtents, direction, orientation, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.BoxCastAll(center, halfExtents, direction, orientation, maxDistance);
+#endif
 		}
 
-		public static RaycastHit[] Run(
+		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction,
 			Quaternion orientation) {
-			return Run(center, halfExtents, direction, orientation, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return BoxCastAll(center, halfExtents, direction, orientation, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.BoxCastAll(center, halfExtents, direction, orientation);
+#endif
 		}
 
-		public static RaycastHit[] Run(
+		public static RaycastHit[] BoxCastAll(
 			Vector3 center,
 			Vector3 halfExtents,
 			Vector3 direction) {
-			return Run(center, halfExtents, direction, Quaternion.identity, float.PositiveInfinity, -5,
-				QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return BoxCastAll(center, halfExtents, direction, Quaternion.identity, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.BoxCastAll(center, halfExtents, direction);
+#endif
 		}
 	}
 }

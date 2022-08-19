@@ -1,32 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class OverlapCapsule {
-		public static Collider[] Run(
-			Vector3 point0,
-			Vector3 point1,
-			float radius,
-			int layerMask) {
-
-			return Run(point0, point1, radius, layerMask, QueryTriggerInteraction.UseGlobal);
-		}
-
-		public static Collider[] Run(Vector3 point0, Vector3 point1, float radius) {
-			return Run(point0, point1, radius, -1, QueryTriggerInteraction.UseGlobal);
-		}
-
-		public static Collider[] Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		public static Collider[] OverlapCapsule(
 			Vector3 point0,
 			Vector3 point1,
 			float radius,
 			[DefaultValue("AllLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-
+#if UNITY_EDITOR
 			Collider[] colliders = Physics.OverlapCapsule(point0, point1, radius, layerMask, queryTriggerInteraction);
 
-#if UNITY_EDITOR
 			bool didHit = colliders != null && colliders.Length > 0;
 
 			VisualUtils.DrawCapsuleNoColor(point0, point1, Vector3.zero, radius, 0, default, didHit);
@@ -42,8 +28,31 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 					VisualUtils.DrawArrow(center, dir, color);
 				}
 			}
-#endif
+			
 			return colliders;
+#else
+			return Physics.OverlapCapsule(point0, point1, radius, layerMask, queryTriggerInteraction);
+#endif
+		}
+		
+		public static Collider[] OverlapCapsule(
+			Vector3 point0,
+			Vector3 point1,
+			float radius,
+			int layerMask) {
+#if UNITY_EDITOR
+			return OverlapCapsule(point0, point1, radius, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapCapsule(point0, point1, radius, layerMask);
+#endif
+		}
+
+		public static Collider[] OverlapCapsule(Vector3 point0, Vector3 point1, float radius) {
+#if UNITY_EDITOR
+			return OverlapCapsule(point0, point1, radius, -1, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.OverlapCapsule(point0, point1, radius);
+#endif
 		}
 	}
 }

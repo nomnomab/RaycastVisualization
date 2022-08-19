@@ -1,9 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.Internal;
 
-namespace Nomnom.RaycastVisualization.ThreeD {
-	internal static class SpherecastNonAlloc {
-		public static int Run(
+namespace Nomnom.RaycastVisualization {
+	public static partial class VisualPhysics {
+		/// <summary>
+		///   <para>Cast sphere along the direction and store the results into buffer.</para>
+		/// </summary>
+		/// <param name="origin">The center of the sphere at the start of the sweep.</param>
+		/// <param name="radius">The radius of the sphere.</param>
+		/// <param name="direction">The direction in which to sweep the sphere.</param>
+		/// <param name="results">The buffer to save the hits into.</param>
+		/// <param name="maxDistance">The max length of the sweep.</param>
+		/// <param name="layerMask">A that is used to selectively ignore colliders when casting a sphere.</param>
+		/// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+		/// <returns>
+		///   <para>The amount of hits stored into the results buffer.</para>
+		/// </returns>
+		public static int SphereCastNonAlloc(
 			Vector3 origin,
 			float radius,
 			Vector3 direction,
@@ -12,11 +25,10 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-
+#if UNITY_EDITOR
 			int count = Physics.defaultPhysicsScene.SphereCast(origin, radius, direction, results, maxDistance, layerMask,
 				queryTriggerInteraction);
-
-#if UNITY_EDITOR
+			
 			direction.Normalize();
 			bool didHit = count > 0;
 
@@ -33,38 +45,50 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			} else {
 				VisualUtils.DrawSphere(origin + direction * distance, radius, color);
 			}
-#endif
 
 			return count;
+#else
+			return Physics.SphereCastNonAlloc(origin, radius, direction, results, maxDistance, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Vector3 origin,
 			float radius,
 			Vector3 direction,
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return Run(origin, radius, direction, results, maxDistance, layerMask,
-				QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(origin, radius, direction, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(origin, radius, direction, results, maxDistance, layerMask);
+#endif
 		}
 
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Vector3 origin,
 			float radius,
 			Vector3 direction,
 			RaycastHit[] results,
 			float maxDistance) {
-			return Run(origin, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(origin, radius, direction, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(origin, radius, direction, results, maxDistance);
+#endif
 		}
 
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Vector3 origin,
 			float radius,
 			Vector3 direction,
 			RaycastHit[] results) {
-			return Run(origin, radius, direction, results, float.PositiveInfinity, -5,
-				QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(origin, radius, direction, results, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(origin, radius, direction, results);
+#endif
 		}
 
 		/// <summary>
@@ -79,7 +103,7 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 		/// <returns>
 		///   <para>The amount of hits stored into the results buffer.</para>
 		/// </returns>
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Ray ray,
 			float radius,
 			RaycastHit[] results,
@@ -87,28 +111,44 @@ namespace Nomnom.RaycastVisualization.ThreeD {
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")]
 			QueryTriggerInteraction queryTriggerInteraction) {
-			return Run(ray.origin, radius, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(ray.origin, radius, ray.direction, results, maxDistance, layerMask, queryTriggerInteraction);
+#else
+			return Physics.SphereCastNonAlloc(ray, radius, results, maxDistance, layerMask, queryTriggerInteraction);
+#endif
 		}
 
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Ray ray,
 			float radius,
 			RaycastHit[] results,
 			float maxDistance,
 			int layerMask) {
-			return Run(ray, radius, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(ray, radius, results, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(ray, radius, results, maxDistance, layerMask);
+#endif
 		}
 
-		public static int Run(
+		public static int SphereCastNonAlloc(
 			Ray ray,
 			float radius,
 			RaycastHit[] results,
 			float maxDistance) {
-			return Run(ray, radius, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(ray, radius, results, maxDistance, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(ray, radius, results, maxDistance);
+#endif
 		}
 
-		public static int Run(Ray ray, float radius, RaycastHit[] results) {
-			return Run(ray, radius, results, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+		public static int SphereCastNonAlloc(Ray ray, float radius, RaycastHit[] results) {
+#if UNITY_EDITOR
+			return SphereCastNonAlloc(ray, radius, results, float.PositiveInfinity, -5, QueryTriggerInteraction.UseGlobal);
+#else
+			return Physics.SphereCastNonAlloc(ray, radius, results);
+#endif
 		}
 	}
 }
