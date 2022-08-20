@@ -24,7 +24,7 @@ namespace Nomnom.RaycastVisualization {
 			public float ImpactCircleNormalArrowLength = 0.0075f;
 			public float RegularArrowLength = 0.1f;
 			public float CircleRadius = 0.025f;
-			public float CircleDistance = 0.0001f;
+			public float CircleDistance = 0.008f;
 		}
 
 		public static NewCustomSettings GetEditorSettings() {

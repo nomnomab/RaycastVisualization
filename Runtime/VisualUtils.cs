@@ -123,7 +123,7 @@ namespace Nomnom.RaycastVisualization {
 			DrawArrow(center, upwardDirection.normalized * distance, GetDefaultColor(), true, settings.ImpactCircleNormalArrowLength);
 		}
 
-		internal static void DrawSphere(in Vector3 center, in float radius, in Color color) {
+		internal static void DrawSphere(in Vector3 center, float radius, in Color color) {
 			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 
 			for (int i = 0; i <= iterations; i++) {
@@ -194,7 +194,7 @@ namespace Nomnom.RaycastVisualization {
 			}
 		}
 
-		internal static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius, in float maxDistance,
+		internal static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, float radius, float maxDistance,
 			in RaycastHit hit, in bool didHit) {
 			Color color = GetColor(didHit);
 
@@ -225,7 +225,7 @@ namespace Nomnom.RaycastVisualization {
 			}
 		}
 
-		internal static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, Color color) {
+		internal static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color) {
 			Matrix4x4 matrix4X4 = Matrix4x4.TRS(center, rotation, size);
 
 			Vector3 blF = matrix4X4.MultiplyPoint(new Vector3(-1, -1, 1));
@@ -258,10 +258,10 @@ namespace Nomnom.RaycastVisualization {
 			in Vector3 pos,
 			in Vector3 direction,
 			in Color color,
-			in bool useCustomLength = false,
+			bool useCustomLength = false,
 			float arrowHeadLength = 0.1f,
-			in float arrowHeadAngle = 20.0f,
-			in float arrowPosition = 1) {
+			float arrowHeadAngle = 20.0f,
+			float arrowPosition = 1) {
 
 			if (!useCustomLength) {
 				arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
