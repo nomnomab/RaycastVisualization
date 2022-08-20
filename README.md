@@ -1,4 +1,5 @@
-﻿# Raycast Visualization
+﻿![Banner](./Gifs~/banner.png)
+
 This asset allows users to view raycasts as the user fires them.
 
 Supports both the 2D and 3D api.
@@ -11,6 +12,7 @@ To get a visual to show up for a physics call simply do the following:
 
 #### For 2D:
 - Replace `Physics2D.` with `VisualPhysics2D.`.
+- Some 2D functions rely more on a 3D perspective in the editor depending on the orientation of the casts.
 
 ## Installation
 #### Using Unity Package Manager
@@ -26,7 +28,7 @@ The user options are located under `Edit/Preferences/RaycastVisualization`
 
 ## Examples
 <details>
-    <summary>3D API</summary>
+    <summary>3D API (click to expand)</summary>
 
 #### Raycast / Linecast
 <img src="./Gifs~/3d/raycast.gif" alt="raycast" width="750"/>
@@ -78,7 +80,7 @@ The user options are located under `Edit/Preferences/RaycastVisualization`
 </details>
 
 <details>
-    <summary>2D API</summary>
+    <summary>2D API (click to expand)</summary>
 
 #### Raycast
 <img src="./Gifs~/2d/raycast.gif" alt="raycast" width="750"/>
