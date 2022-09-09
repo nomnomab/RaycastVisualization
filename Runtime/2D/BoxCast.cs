@@ -200,6 +200,7 @@ namespace Nomnom.RaycastVisualization {
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawBox(Vector2 origin, Vector2 size, float angle, Vector2 direction, float distance, in RaycastHit2D hit, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       size *= 0.5f;
       
       direction.Normalize();
@@ -269,6 +270,7 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(VisualUtils.GetDefaultColor());
+#endif
     }
   }
 }

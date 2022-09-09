@@ -3,14 +3,11 @@ using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
   internal static class Utils {
+#if UNITY_EDITOR
     public static float[] Sin;
     public static float[] Cos;
-
-#if UNITY_EDITOR
+    
     [UnityEditor.InitializeOnLoadMethod]
-#else
-    [UnityEngine.RuntimeInitializeOnLoadMethod]
-#endif
     private static void OnLoad() {
       uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
       float radiansDelta = 2 * Mathf.PI / iterations;
@@ -32,6 +29,7 @@ namespace Nomnom.RaycastVisualization.Shapes {
         Cos[i] = Mathf.Cos(d);
       }
     }
+#endif
     
     public static Color GetColor(bool value) {
 #if UNITY_EDITOR

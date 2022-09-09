@@ -243,6 +243,7 @@ namespace Nomnom.RaycastVisualization {
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawContact(ContactPoint2D contactPoint, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       Color color = VisualUtils.GetDefaultColor();
       
       Circle circle = Circle.Default;
@@ -259,10 +260,12 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(color);
+#endif
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawContact(Collider2D from, Collider2D to, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       Color color = VisualUtils.GetDefaultColor();
       
       Line line = new Line {
@@ -281,10 +284,12 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(color);
+#endif
     }
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawContact(Rigidbody2D from, Collider2D to, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       Color color = VisualUtils.GetDefaultColor();
       
       Line line = new Line {
@@ -303,6 +308,7 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(color);
+#endif
     }
   }
 }

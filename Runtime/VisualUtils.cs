@@ -11,13 +11,15 @@ namespace Nomnom.RaycastVisualization {
 		private static Vector3 _cacheHorizontal = Vector3.zero;
 		private static Vector3 _cacheVertical = Vector3.zero;
 		private static Vector3 _cacheVertical2 = Vector3.zero;
-		
-#if UNITY_EDITOR
+        
 		static VisualUtils() {
-			RecalculateComputations();
+#if UNITY_EDITOR
+          RecalculateComputations();
+#endif
 		}
 
 		public static void RecalculateComputations() {
+#if UNITY_EDITOR
 			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 			float radiansDelta = 2 * Mathf.PI / iterations;
 			
@@ -37,10 +39,10 @@ namespace Nomnom.RaycastVisualization {
 				_precomputatedSin[i] = Mathf.Sin(d);
 				_precomputatedCos[i] = Mathf.Cos(d);
 			}
-		}
 #endif
-		
-		public static float GetMaxRayLength(float distance) => Mathf.Min(distance, 10000);
+		}
+
+        public static float GetMaxRayLength(float distance) => Mathf.Min(distance, 10000);
 
 		public static Color GetColor(bool value) {
 #if UNITY_EDITOR
@@ -59,9 +61,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
 			return Color.white;
 		}
-
-#if UNITY_EDITOR
+        
 		internal static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
+#if UNITY_EDITOR
 			const float RADIUS = 0.025f;
 
 			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
@@ -90,9 +92,11 @@ namespace Nomnom.RaycastVisualization {
 				lastPosition.y = cachePosition.y;
 				lastPosition.z = cachePosition.z;
 			}
+#endif
 		}
 
 		internal static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
+#if UNITY_EDITOR
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			Vector3 lastPosition = Vector3.zero;
@@ -121,9 +125,11 @@ namespace Nomnom.RaycastVisualization {
 			}
 
 			DrawArrow(center, upwardDirection.normalized * distance, GetDefaultColor(), true, settings.ImpactCircleNormalArrowLength);
+#endif
 		}
 
 		internal static void DrawSphere(in Vector3 center, float radius, in Color color) {
+#if UNITY_EDITOR
 			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 
 			for (int i = 0; i <= iterations; i++) {
@@ -160,11 +166,13 @@ namespace Nomnom.RaycastVisualization {
 				_lastPositionVertical2.y = _cacheVertical2.y;
 				_lastPositionVertical2.z = _cacheVertical2.z;
 			}
+#endif
 		}
 
 		internal static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
 			in float maxDistance,
 			in RaycastHit hit, in bool didHit) {
+#if UNITY_EDITOR
 			Color color = GetDefaultColor();
 
 			if (didHit) {
@@ -192,10 +200,12 @@ namespace Nomnom.RaycastVisualization {
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
+#endif
 		}
 
 		internal static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, float radius, float maxDistance,
 			in RaycastHit hit, in bool didHit) {
+#if UNITY_EDITOR
 			Color color = GetColor(didHit);
 
 			if (didHit) {
@@ -223,9 +233,11 @@ namespace Nomnom.RaycastVisualization {
 				DrawSphere(point1Pos, radius, color);
 				DrawSphere(point2Pos, radius, color);
 			}
+#endif
 		}
 
 		internal static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color) {
+#if UNITY_EDITOR
 			Matrix4x4 matrix4X4 = Matrix4x4.TRS(center, rotation, size);
 
 			Vector3 blF = matrix4X4.MultiplyPoint(new Vector3(-1, -1, 1));
@@ -252,44 +264,49 @@ namespace Nomnom.RaycastVisualization {
 			DrawLine(brB, brF, color);
 			DrawLine(trB, trF, color);
 			DrawLine(tlB, tlF, color);
+#endif
 		}
 
-		internal static void DrawArrow(
-			in Vector3 pos,
-			in Vector3 direction,
-			in Color color,
-			bool useCustomLength = false,
-			float arrowHeadLength = 0.1f,
-			float arrowHeadAngle = 20.0f,
-			float arrowPosition = 1) {
+        internal static void DrawArrow(
+          in Vector3 pos,
+          in Vector3 direction,
+          in Color color,
+          bool useCustomLength = false,
+          float arrowHeadLength = 0.1f,
+          float arrowHeadAngle = 20.0f,
+          float arrowPosition = 1) {
+#if UNITY_EDITOR
+          if (!useCustomLength) {
+            arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
+          }
 
-			if (!useCustomLength) {
-				arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
-			}
+          Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
+          Vector3 backDir = Vector3.back * arrowHeadLength;
+          Vector3 right = rot * Quaternion.Euler(arrowHeadAngle, 0, 0) * backDir;
+          Vector3 left = rot * Quaternion.Euler(-arrowHeadAngle, 0, 0) * backDir;
+          Vector3 up = rot * Quaternion.Euler(0, arrowHeadAngle, 0) * backDir;
+          Vector3 down = rot * Quaternion.Euler(0, -arrowHeadAngle, 0) * backDir;
 
-			Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
-			Vector3 backDir = Vector3.back * arrowHeadLength;
-			Vector3 right = rot * Quaternion.Euler(arrowHeadAngle, 0, 0) * backDir;
-			Vector3 left = rot * Quaternion.Euler(-arrowHeadAngle, 0, 0) * backDir;
-			Vector3 up = rot * Quaternion.Euler(0, arrowHeadAngle, 0) * backDir;
-			Vector3 down = rot * Quaternion.Euler(0, -arrowHeadAngle, 0) * backDir;
+          Vector3 arrowTip = pos + direction * arrowPosition;
 
-			Vector3 arrowTip = pos + direction * arrowPosition;
+          DrawRay(pos, direction, color);
+          DrawRay(arrowTip, right, color);
+          DrawRay(arrowTip, left, color);
+          DrawRay(arrowTip, up, color);
+          DrawRay(arrowTip, down, color);
+#endif
+        }
 
-			DrawRay(pos, direction, color);
-			DrawRay(arrowTip, right, color);
-			DrawRay(arrowTip, left, color);
-			DrawRay(arrowTip, up, color);
-			DrawRay(arrowTip, down, color);
-		}
-
-		internal static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
+        internal static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
+#if UNITY_EDITOR
 			Debug.DrawLine(start, end, color, 0, true);
+#endif
 		}
 
 		internal static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
+#if UNITY_EDITOR
 			Debug.DrawRay(start, direction, color, 0, true);
-		}
 #endif
-	}
+		}
+    }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
   internal struct Line {
@@ -10,3 +11,4 @@ namespace Nomnom.RaycastVisualization.Shapes {
     }
   }
 }
+#endif

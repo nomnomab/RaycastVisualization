@@ -121,6 +121,7 @@ namespace Nomnom.RaycastVisualization {
     }
 
     internal static void DrawPoint(Collider2D collider2D, Vector2 origin, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       bool didHit = collider2D;
       Color color = VisualUtils.GetColor(didHit);
       
@@ -152,6 +153,7 @@ namespace Nomnom.RaycastVisualization {
       };
 
       filter.Draw(VisualUtils.GetDefaultColor());
+#endif
     }
   }
 }

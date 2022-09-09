@@ -1,4 +1,4 @@
-﻿![Banner](./Gifs~/banner.png)
+﻿/![Banner](./Gifs~/banner.png)
 
 This asset allows users to view raycasts as the user fires them.
 
@@ -13,6 +13,15 @@ To get a visual to show up for a physics call simply do the following:
 #### For 2D:
 - Replace `Physics2D.` with `VisualPhysics2D.`.
 - Some 2D functions rely more on a 3D perspective in the editor depending on the orientation of the casts.
+
+```csharp
+// Example
+void SomeFunction() {
+    if (VisualPhysics.Raycast(position, direction)) {
+        Debug.Log("Hit!");
+    }
+}
+```
 
 ## Installation
 #### Using Unity Package Manager

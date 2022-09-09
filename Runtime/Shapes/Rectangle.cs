@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if UNITY_EDITOR
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
@@ -23,3 +24,4 @@ namespace Nomnom.RaycastVisualization.Shapes {
     }
   }
 }
+#endif

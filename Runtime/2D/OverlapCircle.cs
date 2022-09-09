@@ -130,6 +130,7 @@ namespace Nomnom.RaycastVisualization {
     }
 
     internal static void DrawCircleStationary(Vector2 origin, float radius, Collider2D collider, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       bool didHit = collider;
       Color color = VisualUtils.GetColor(didHit);
       
@@ -163,6 +164,7 @@ namespace Nomnom.RaycastVisualization {
       };
 
       filter.Draw(VisualUtils.GetDefaultColor());
+#endif
     }
   }
 }

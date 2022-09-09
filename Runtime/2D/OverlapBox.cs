@@ -141,6 +141,7 @@ namespace Nomnom.RaycastVisualization {
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawBoxStationary(Vector2 origin, Vector2 size, float angle, Collider2D collider, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       size *= 0.5f;
       
       bool didHit = collider;
@@ -177,6 +178,7 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(VisualUtils.GetDefaultColor());
+#endif
     }
   }
 }

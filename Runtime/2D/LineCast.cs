@@ -126,6 +126,7 @@ namespace Nomnom.RaycastVisualization {
     }
 
     internal static void DrawLine(Vector2 start, Vector2 end, in RaycastHit2D hit, ContactFilter2D? contactFilter = default) {
+#if UNITY_EDITOR
       bool didHit = hit.collider;
       Color color = VisualUtils.GetColor(didHit);
 
@@ -181,6 +182,7 @@ namespace Nomnom.RaycastVisualization {
         filter = contactFilter.Value
       };
       filter.Draw(VisualUtils.GetDefaultColor());
+#endif
     }
   }
 }

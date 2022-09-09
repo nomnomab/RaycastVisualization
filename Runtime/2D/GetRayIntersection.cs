@@ -53,6 +53,7 @@ namespace Nomnom.RaycastVisualization {
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static void DrawRayIntersection(in Ray ray, in RaycastHit2D hit, float distance) {
+#if UNITY_EDITOR
       bool didHit = hit.collider;
       Color color = VisualUtils.GetColor(didHit);
 
@@ -81,6 +82,7 @@ namespace Nomnom.RaycastVisualization {
         arrow.direction = ray.direction.normalized * VisualUtils.GetMaxRayLength(distance);
         arrow.Draw(color);
       }
+#endif
     }
   }
 }
