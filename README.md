@@ -1,4 +1,4 @@
-﻿/![Banner](./Gifs~/banner.png)
+![Banner](./Gifs~/banner.png)
 
 This asset allows users to view raycasts as the user fires them.
 
