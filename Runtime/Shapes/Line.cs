@@ -2,13 +2,14 @@
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-  internal struct Line {
-    public Vector3 from;
-    public Vector3 to;
+    internal struct Line {
+        public Vector3 from;
+        public Vector3 to;
 
-    public void Draw(Color color) {
-      Debug.DrawLine(from, to, color, 0, true);
+        public void Draw(Color color) {
+            float drawTime = VisualPhysics.NextDrawTime;
+            Debug.DrawLine(from, to, color, drawTime, true);
+        }
     }
-  }
 }
 #endif

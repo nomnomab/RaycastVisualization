@@ -17,10 +17,11 @@ namespace Nomnom.RaycastVisualization.Shapes {
       Vector3 tl = matrix4X4.MultiplyPoint(new Vector3(-1, 1, 0));
       Vector3 tr = matrix4X4.MultiplyPoint(new Vector3(1, 1, 0));
 
-      Debug.DrawLine(bl, br, color, 0, true);
-      Debug.DrawLine(br, tr, color, 0, true);
-      Debug.DrawLine(tr, tl, color, 0, true);
-      Debug.DrawLine(tl, bl, color, 0, true);
+      float drawTime = VisualPhysics.NextDrawTime;
+      Debug.DrawLine(bl, br, color, drawTime, true);
+      Debug.DrawLine(br, tr, color, drawTime, true);
+      Debug.DrawLine(tr, tl, color, drawTime, true);
+      Debug.DrawLine(tl, bl, color, drawTime, true);
     }
   }
 }

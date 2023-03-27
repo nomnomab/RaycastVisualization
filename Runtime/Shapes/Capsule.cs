@@ -28,10 +28,11 @@ namespace Nomnom.RaycastVisualization.Shapes {
         radius = radius
       };
       
-      Debug.DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color, 0, true);
-      Debug.DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color, 0, true);
-      Debug.DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color, 0, true);
-      Debug.DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color, 0, true);
+      float drawTime = VisualPhysics.NextDrawTime;
+      Debug.DrawLine(point1Pos + Vector3.forward * radius, point2Pos + Vector3.forward * radius, color, drawTime, true);
+      Debug.DrawLine(point1Pos + Vector3.back * radius, point2Pos + Vector3.back * radius, color, drawTime, true);
+      Debug.DrawLine(point1Pos + Vector3.right * radius, point2Pos + Vector3.right * radius, color, drawTime, true);
+      Debug.DrawLine(point1Pos + Vector3.left * radius, point2Pos + Vector3.left * radius, color, drawTime, true);
       
       sphere1.Draw(color);
       sphere2.Draw(color);

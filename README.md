@@ -4,38 +4,7 @@ This asset allows users to view raycasts as the user fires them.
 
 Supports both the 2D and 3D api.
 
-## Usage
-To get a visual to show up for a physics call simply do the following:
-
-#### For 3D:
-- Replace `Physics.` with `VisualPhysics.`.
-
-#### For 2D:
-- Replace `Physics2D.` with `VisualPhysics2D.`.
-- Some 2D functions rely more on a 3D perspective in the editor depending on the orientation of the casts.
-
-```csharp
-// Example
-void SomeFunction() {
-    if (VisualPhysics.Raycast(position, direction)) {
-        Debug.Log("Hit!");
-    }
-}
-```
-
-## Installation
-#### Using Unity Package Manager
-1. Open the Package Manager from `Window/Package Manager`
-2. Click the '+' button in the top-left of the window
-3. Click 'Add package from git URL'
-4. Provide the URL of this git repository: https://github.com/nomnomab/RaycastVisualization.git
-5. Click the 'add' button
-#### User Options
-The user options are located under `Edit/Preferences/RaycastVisualization`
-
-![Settings](./Gifs~/3d/settings.png)
-
-## Examples
+## GIF Examples Of All Visuals
 <details>
     <summary>3D API (click to expand)</summary>
 
@@ -172,3 +141,65 @@ The user options are located under `Edit/Preferences/RaycastVisualization`
 #### GetRayIntersectionAll / GetRayIntersectionNonAlloc
 <img src="./Gifs~/2d/get_ray_intersection_all.gif" alt="get_ray_intersection_all" width="750"/>
 </details>
+
+## Installation
+#### Using Unity Package Manager
+1. Open the Package Manager from `Window/Package Manager`
+2. Click the '+' button in the top-left of the window
+3. Click 'Add package from git URL'
+4. Provide the URL of this git repository: https://github.com/nomnomab/RaycastVisualization.git
+5. Click the 'add' button
+
+## Usage
+To get a visual to show up for a physics call simply do the following:
+
+#### For 3D:
+- Replace `Physics.` with `VisualPhysics.`.
+
+#### For 2D:
+- Replace `Physics2D.` with `VisualPhysics2D.`.
+- Some 2D functions rely more on a 3D perspective in the editor depending on the orientation of the casts.
+
+```csharp
+// Example
+void SomeFunction() {
+    if (VisualPhysics.Raycast(position, direction)) {
+        Debug.Log("Hit!");
+    }
+}
+```
+
+#### API Switching:
+
+You can also use a trick to automatically swap between the two APIs (useful for when you want to use the visual API in the editor, but the normal API in builds):
+- Using `VisualPhysics` in a build will use the normal `Physics` API, however the method call may not be inlined depending on the compiler's mood.
+```csharp
+#if UNITY_EDITOR
+using Physics = Nomnom.RaycastVisualization.VisualPhysics;
+#else
+using Physics = UnityEngine.Physics;
+#endif
+
+void SomeFunction() {
+    if (Physics.Raycast(position, direction)) {
+        Debug.Log("Hit!");
+    }
+}
+```
+
+#### Defining a Visual's Lifetime:
+
+Using `VisualLifetime.Create(seconds)` you can define how long a cast will display for:
+```csharp
+// will display the raycast for a second, rather than a single frame
+using (VisualLifetime.Create(1f)) {
+    if (VisualPhysics.Raycast(position, direction)) {
+        Debug.Log("Hit");
+    }
+}
+```
+
+#### User Options
+The user options are located under `Edit/Preferences/RaycastVisualization`
+
+![Settings](./Gifs~/3d/settings.png)
