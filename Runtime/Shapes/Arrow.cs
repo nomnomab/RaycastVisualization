@@ -25,7 +25,7 @@ namespace Nomnom.RaycastVisualization.Shapes {
                 headLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
             }
 
-            Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
+            Quaternion rot = direction == Vector3.zero || VisualUtils.IsNan(direction) ? Quaternion.identity : Quaternion.LookRotation(direction);
             Vector3 backDir = Vector3.back * headLength;
             Vector3 right = rot * Quaternion.Euler(headAngle, 0, 0) * backDir;
             Vector3 left = rot * Quaternion.Euler(-headAngle, 0, 0) * backDir;

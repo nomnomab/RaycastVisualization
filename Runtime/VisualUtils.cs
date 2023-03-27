@@ -79,7 +79,7 @@ namespace Nomnom.RaycastVisualization {
 				cachePosition.y = sin;
 				cachePosition.z = 0;
 
-				Quaternion rot = upwardDirection == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(upwardDirection);
+				Quaternion rot = upwardDirection == Vector3.zero || IsNan(upwardDirection) ? Quaternion.identity : Quaternion.LookRotation(upwardDirection);
 
 				cachePosition = rot * cachePosition;
 				cachePosition += center;
@@ -110,7 +110,7 @@ namespace Nomnom.RaycastVisualization {
 				cachePosition.y = sin;
 				cachePosition.z = 0;
 
-				Quaternion rot = upwardDirection == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(upwardDirection);
+				Quaternion rot = upwardDirection == Vector3.zero || IsNan(upwardDirection) ? Quaternion.identity : Quaternion.LookRotation(upwardDirection);
 				
 				cachePosition = rot * cachePosition;
 				cachePosition += center + upwardDirection * settings.CircleDistance;
@@ -280,7 +280,7 @@ namespace Nomnom.RaycastVisualization {
             arrowHeadLength = VisualPhysicsSettingsHandler.GetEditorSettings().RegularArrowLength;
           }
 
-          Quaternion rot = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
+          Quaternion rot = direction == Vector3.zero || IsNan(direction) ? Quaternion.identity : Quaternion.LookRotation(direction);
           Vector3 backDir = Vector3.back * arrowHeadLength;
           Vector3 right = rot * Quaternion.Euler(arrowHeadAngle, 0, 0) * backDir;
           Vector3 left = rot * Quaternion.Euler(-arrowHeadAngle, 0, 0) * backDir;
@@ -310,5 +310,9 @@ namespace Nomnom.RaycastVisualization {
 			Debug.DrawRay(start, direction, color, drawTime, true);
 #endif
 		}
+        
+        internal static bool IsNan(Vector3 vector) {
+            return float.IsNaN(vector.x) || float.IsNaN(vector.y) || float.IsNaN(vector.z);
+        }
     }
 }

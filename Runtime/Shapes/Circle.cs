@@ -31,7 +31,7 @@ namespace Nomnom.RaycastVisualization.Shapes {
                 cachePosition.y = sin;
                 cachePosition.z = 0;
 
-                Quaternion rot = upDirection == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(upDirection);
+                Quaternion rot = upDirection == Vector3.zero || VisualUtils.IsNan(upDirection) ? Quaternion.identity : Quaternion.LookRotation(upDirection);
 
                 cachePosition = rot * cachePosition;
                 cachePosition += origin;
