@@ -85,7 +85,7 @@ namespace Nomnom.RaycastVisualization {
 				cachePosition += center;
 
 				if (i != 0) {
-					Debug.DrawLine(lastPosition, cachePosition, color);
+                    DrawLine(lastPosition, cachePosition, color);
 				}
 
 				lastPosition.x = cachePosition.x;
@@ -116,7 +116,7 @@ namespace Nomnom.RaycastVisualization {
 				cachePosition += center + upwardDirection * settings.CircleDistance;
 
 				if (i != 0) {
-					Debug.DrawLine(lastPosition, cachePosition, color);
+                    DrawLine(lastPosition, cachePosition, color);
 				}
 
 				lastPosition.x = cachePosition.x;
@@ -299,13 +299,15 @@ namespace Nomnom.RaycastVisualization {
 
         internal static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
 #if UNITY_EDITOR
-			Debug.DrawLine(start, end, color, 0, true);
+            float drawTime = VisualPhysics.NextDrawTime;
+			Debug.DrawLine(start, end, color, drawTime, true);
 #endif
 		}
 
 		internal static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
 #if UNITY_EDITOR
-			Debug.DrawRay(start, direction, color, 0, true);
+            float drawTime = VisualPhysics.NextDrawTime;
+			Debug.DrawRay(start, direction, color, drawTime, true);
 #endif
 		}
     }
