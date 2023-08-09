@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-  internal struct Cube {
+  public struct Cube {
     public Vector3 origin;
     public Vector3 size;
     public Quaternion rotation;

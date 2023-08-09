@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct Range {
+    public struct Range {
         public Vector3 from;
         public Vector3 to;
 

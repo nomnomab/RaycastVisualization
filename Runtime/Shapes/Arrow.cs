@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct Arrow {
+    public struct Arrow {
         public static Arrow Default => new Arrow {
             headLength = 0.1f,
             headAngle = 20f,

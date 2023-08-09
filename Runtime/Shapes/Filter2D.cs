@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-  internal struct Filter2D {
+  public struct Filter2D {
     public Vector2 origin;
     public ContactFilter2D filter;
     

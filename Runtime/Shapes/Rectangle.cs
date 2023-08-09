@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-  internal struct Rectangle {
+  public struct Rectangle {
     public Vector3 origin;
     public Vector2 size;
     public float angle;

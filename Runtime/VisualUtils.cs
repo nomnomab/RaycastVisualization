@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization {
-	internal static class VisualUtils {
+	public static class VisualUtils {
 		private static float[] _precomputatedSin;
 		private static float[] _precomputatedCos;
 		private static Vector3 _lastPositionHorizontal = Vector3.zero;
@@ -62,7 +62,7 @@ namespace Nomnom.RaycastVisualization {
 			return Color.white;
 		}
         
-		internal static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
+		public static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {
 #if UNITY_EDITOR
 			const float RADIUS = 0.025f;
 
@@ -95,7 +95,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-		internal static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
+		public static void DrawNormalCircle(in Vector3 center, in Vector3 upwardDirection, in Color color, float distance = 0.025f) {
 #if UNITY_EDITOR
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
@@ -128,7 +128,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-		internal static void DrawSphere(in Vector3 center, float radius, in Color color) {
+		public static void DrawSphere(in Vector3 center, float radius, in Color color) {
 #if UNITY_EDITOR
 			uint iterations = VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 
@@ -169,7 +169,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-		internal static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
+		public static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
 			in float maxDistance,
 			in RaycastHit hit, in bool didHit) {
 #if UNITY_EDITOR
@@ -203,7 +203,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-		internal static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, float radius, float maxDistance,
+		public static void DrawCapsule(in Vector3 point1, in Vector3 point2, in Vector3 direction, float radius, float maxDistance,
 			in RaycastHit hit, in bool didHit) {
 #if UNITY_EDITOR
 			Color color = GetColor(didHit);
@@ -236,7 +236,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-		internal static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color) {
+		public static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color) {
 #if UNITY_EDITOR
 			Matrix4x4 matrix4X4 = Matrix4x4.TRS(center, rotation, size);
 
@@ -267,7 +267,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
-        internal static void DrawArrow(
+        public static void DrawArrow(
           in Vector3 pos,
           in Vector3 direction,
           in Color color,
@@ -297,21 +297,21 @@ namespace Nomnom.RaycastVisualization {
 #endif
         }
 
-        internal static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
+        public static void DrawLine(in Vector3 start, in Vector3 end, in Color color) {
 #if UNITY_EDITOR
             float drawTime = VisualPhysics.NextDrawTime;
 			Debug.DrawLine(start, end, color, drawTime, true);
 #endif
 		}
 
-		internal static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
+		public static void DrawRay(in Vector3 start, in Vector3 direction, in Color color) {
 #if UNITY_EDITOR
             float drawTime = VisualPhysics.NextDrawTime;
 			Debug.DrawRay(start, direction, color, drawTime, true);
 #endif
 		}
         
-        internal static bool IsNan(Vector3 vector) {
+        public static bool IsNan(Vector3 vector) {
             return float.IsNaN(vector.x) || float.IsNaN(vector.y) || float.IsNaN(vector.z);
         }
     }

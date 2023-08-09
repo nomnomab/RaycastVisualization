@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-  internal static class Utils {
+  public static class Utils {
 #if UNITY_EDITOR
     public static float[] Sin;
     public static float[] Cos;

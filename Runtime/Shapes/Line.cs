@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct Line {
+    public struct Line {
         public Vector3 from;
         public Vector3 to;
 

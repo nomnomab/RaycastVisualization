@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct Stadium {
+    public struct Stadium {
         public static Stadium Default => new Stadium {
             radius = 0.025f
         };

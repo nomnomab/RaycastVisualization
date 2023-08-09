@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct NormalCircle {
+    public struct NormalCircle {
         public static NormalCircle Default => new NormalCircle {
             radius = 0.025f,
             distance = 0.025f

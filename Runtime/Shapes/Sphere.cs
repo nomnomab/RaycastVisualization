@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization.Shapes {
-    internal struct Sphere {
+    public struct Sphere {
         private static uint Iterations => VisualPhysicsSettingsHandler.GetEditorSettings().CircleResolution;
 
         public Vector3 origin;
