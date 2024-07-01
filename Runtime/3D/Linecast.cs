@@ -49,8 +49,8 @@ namespace Nomnom.RaycastVisualization {
 			out RaycastHit hitInfo,
 			[DefaultValue("DefaultRaycastLayers")] int layerMask,
 			[DefaultValue("QueryTriggerInteraction.UseGlobal")] QueryTriggerInteraction queryTriggerInteraction) {
-			Vector3 direction = end - start;
 #if UNITY_EDITOR
+			var direction = end - start;
 			return RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude, layerMask, queryTriggerInteraction);
 #else
 			return Physics.Linecast(start, end, out hitInfo, layerMask, queryTriggerInteraction);
@@ -60,7 +60,8 @@ namespace Nomnom.RaycastVisualization {
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo, int layerMask) {
 #if UNITY_EDITOR
-			return RaycastWithHit(start, end, out hitInfo, layerMask);
+			var direction = end - start;
+			return RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude, layerMask);
 #else
 			return Physics.Linecast(start, end, out hitInfo, layerMask);
 #endif
@@ -69,7 +70,8 @@ namespace Nomnom.RaycastVisualization {
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hitInfo) {
 #if UNITY_EDITOR
-			return RaycastWithHit(start, end, out hitInfo);
+			var direction = end - start;
+			return RaycastWithHit(start, direction.normalized, out hitInfo, direction.magnitude);
 #else
 			return Physics.Linecast(start, end, out hitInfo);
 #endif
