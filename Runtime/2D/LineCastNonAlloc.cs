@@ -4,6 +4,9 @@ using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.LinecastNonAlloc is deprecated. Use VisualPhysics2D.Linecast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int LinecastNonAlloc(Vector2 start, Vector2 end, RaycastHit2D[] results) {
 #if UNITY_EDITOR
@@ -23,6 +26,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.LinecastNonAlloc is deprecated. Use VisualPhysics2D.Linecast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int LinecastNonAlloc(
       Vector2 start,
@@ -47,6 +53,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.LinecastNonAlloc is deprecated. Use VisualPhysics2D.Linecast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int LinecastNonAlloc(
       Vector2 start,
@@ -84,6 +93,9 @@ namespace Nomnom.RaycastVisualization {
     /// <returns>
     ///   <para>Returns the number of results placed in the results array.</para>
     /// </returns>
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.LinecastNonAlloc is deprecated. Use VisualPhysics2D.Linecast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int LinecastNonAlloc(
       Vector2 start,

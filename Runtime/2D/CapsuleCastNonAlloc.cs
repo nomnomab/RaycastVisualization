@@ -4,6 +4,9 @@ using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.CapsuleCastNonAlloc is deprecated. Use VisualPhysics2D.CapsuleCast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CapsuleCastNonAlloc(
       Vector2 origin,
@@ -29,6 +32,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.CapsuleCastNonAlloc is deprecated. Use VisualPhysics2D.CapsuleCast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CapsuleCastNonAlloc(
       Vector2 origin,
@@ -55,6 +61,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.CapsuleCastNonAlloc is deprecated. Use VisualPhysics2D.CapsuleCast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CapsuleCastNonAlloc(
       Vector2 origin,
@@ -83,6 +92,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.CapsuleCastNonAlloc is deprecated. Use VisualPhysics2D.CapsuleCast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CapsuleCastNonAlloc(
       Vector2 origin,
@@ -128,6 +140,9 @@ namespace Nomnom.RaycastVisualization {
     /// <returns>
     ///   <para>Returns the number of results placed in the results array.</para>
     /// </returns>
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.CapsuleCastNonAlloc is deprecated. Use VisualPhysics2D.CapsuleCast instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int CapsuleCastNonAlloc(
       Vector2 origin,

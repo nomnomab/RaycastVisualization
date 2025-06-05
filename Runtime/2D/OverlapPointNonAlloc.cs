@@ -4,6 +4,9 @@ using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapPointNonAlloc is deprecated. Use VisualPhysics2D.OverlapPoint instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapPointNonAlloc(Vector2 point, Collider2D[] results) {
 #if UNITY_EDITOR
@@ -23,6 +26,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapPointNonAlloc is deprecated. Use VisualPhysics2D.OverlapPoint instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapPointNonAlloc(Vector2 point, Collider2D[] results, int layerMask) {
 #if UNITY_EDITOR
@@ -43,6 +49,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapPointNonAlloc is deprecated. Use VisualPhysics2D.OverlapPoint instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapPointNonAlloc(
       Vector2 point,
@@ -78,6 +87,9 @@ namespace Nomnom.RaycastVisualization {
     /// <returns>
     ///   <para>Returns the number of results placed in the results array.</para>
     /// </returns>
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapPointNonAlloc is deprecated. Use VisualPhysics2D.OverlapPoint instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapPointNonAlloc(
       Vector2 point,

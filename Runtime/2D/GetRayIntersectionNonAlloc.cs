@@ -4,6 +4,9 @@ using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
+#if UNITY_6000_0_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.GetRayIntersectionNonAlloc is deprecated. Use VisualPhysics2D.GetRayIntersection instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetRayIntersectionNonAlloc(Ray ray, RaycastHit2D[] results) {
 #if UNITY_EDITOR
@@ -23,6 +26,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_6000_0_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.GetRayIntersectionNonAlloc is deprecated. Use VisualPhysics2D.GetRayIntersection instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetRayIntersectionNonAlloc(Ray ray, RaycastHit2D[] results, float distance) {
 #if UNITY_EDITOR
