@@ -11,6 +11,9 @@
     "methods",
     "visuals"
   ],
+  "dependencies": {
+    "com.unity.modules.imgui": "1.0.0"
+  },
   "author": {
     "name": "Andrew Burke",
     "email": "nomnomab1@gmail.com"
