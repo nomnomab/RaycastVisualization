@@ -5,6 +5,9 @@ using UnityEngine.Internal;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapCircleNonAlloc is deprecated. Use VisualPhysics2D.OverlapCircle instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapCircleNonAlloc(Vector2 point, float radius, Collider2D[] results) {
 #if UNITY_EDITOR
@@ -24,6 +27,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapCircleNonAlloc is deprecated. Use VisualPhysics2D.OverlapCircle instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapCircleNonAlloc(
       Vector2 point,
@@ -48,6 +54,9 @@ namespace Nomnom.RaycastVisualization {
 #endif
     }
 
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapCircleNonAlloc is deprecated. Use VisualPhysics2D.OverlapCircle instead.")]
+#endif
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int OverlapCircleNonAlloc(
       Vector2 point,
@@ -85,6 +94,9 @@ namespace Nomnom.RaycastVisualization {
     /// <returns>
     ///   <para>Returns the number of results placed in the results array.</para>
     /// </returns>
+#if UNITY_2023_1_OR_NEWER
+    [System.Obsolete("VisualPhysics2D.OverlapCircleNonAlloc is deprecated. Use VisualPhysics2D.OverlapCircle instead.")]
+#endif
     public static int OverlapCircleNonAlloc(
       Vector2 point,
       float radius,
