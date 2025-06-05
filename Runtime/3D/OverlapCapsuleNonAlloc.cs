@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if RAYCASTVISUALIZATION_3D_PHYSICS
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Internal;
 
@@ -79,3 +80,4 @@ namespace Nomnom.RaycastVisualization {
 		}
 	}
 }
+#endif

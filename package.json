@@ -1,6 +1,6 @@
 {
   "name": "com.nomnom.raycast-visualization",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "displayName": "Nomnom's Raycast Visualization",
   "description": "This asset allows users to view debug visuals for all raycast methods.",
   "unity": "2020.3",

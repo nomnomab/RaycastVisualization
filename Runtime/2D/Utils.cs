@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if RAYCASTVISUALIZATION_2D_PHYSICS
+using UnityEngine;
 
 namespace Nomnom.RaycastVisualization {
   public static partial class VisualPhysics2D {
@@ -15,3 +16,4 @@ namespace Nomnom.RaycastVisualization {
     }
   }
 }
+#endif
