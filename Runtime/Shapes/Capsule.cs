@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿#if UNITY_EDITOR && RAYCASTVISUALIZATION_3D_PHYSICS
 using System.Runtime.CompilerServices;
 using UnityEngine;
 

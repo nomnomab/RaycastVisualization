@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if RAYCASTVISUALIZATION_2D_PHYSICS
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Nomnom.RaycastVisualization.Shapes;
 using UnityEngine;
@@ -301,3 +302,4 @@ namespace Nomnom.RaycastVisualization {
     }
   }
 }
+#endif

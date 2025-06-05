@@ -169,6 +169,7 @@ namespace Nomnom.RaycastVisualization {
 #endif
 		}
 
+#if RAYCASTVISUALIZATION_3D_PHYSICS
 		public static void DrawCapsuleNoColor(in Vector3 point1, in Vector3 point2, in Vector3 direction, in float radius,
 			in float maxDistance,
 			in RaycastHit hit, in bool didHit) {
@@ -235,6 +236,7 @@ namespace Nomnom.RaycastVisualization {
 			}
 #endif
 		}
+#endif
 
 		public static void DrawCube(in Vector3 center, in Vector3 size, in Quaternion rotation, in Color color) {
 #if UNITY_EDITOR

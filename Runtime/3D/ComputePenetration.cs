@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if RAYCASTVISUALIZATION_3D_PHYSICS
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Nomnom.RaycastVisualization {
@@ -31,3 +32,4 @@ namespace Nomnom.RaycastVisualization {
 		}
 	}
 }
+#endif
