@@ -49,8 +49,9 @@ namespace Nomnom.RaycastVisualization {
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			return value ? settings.HitColor : settings.NoHitColor;
-#endif
+#else
 			return Color.white;
+#endif
 		}
 
 		public static Color GetDefaultColor() {
@@ -58,8 +59,9 @@ namespace Nomnom.RaycastVisualization {
 			VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
 			return settings.DefaultColor;
-#endif
+#else
 			return Color.white;
+#endif
 		}
         
 		public static void DrawCircle(in Vector3 center, in Vector3 upwardDirection, in Color color) {

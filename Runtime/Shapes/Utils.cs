@@ -36,8 +36,9 @@ namespace Nomnom.RaycastVisualization.Shapes {
       VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
       return value ? settings.HitColor : settings.NoHitColor;
-#endif
+#else
       return Color.white;
+#endif
     }
 
     public static Color GetDefaultColor() {
@@ -45,8 +46,9 @@ namespace Nomnom.RaycastVisualization.Shapes {
       VisualPhysicsSettingsHandler.NewCustomSettings settings = VisualPhysicsSettingsHandler.GetEditorSettings();
 
       return settings.DefaultColor;
-#endif
+#else
       return Color.white;
+#endif
     }
     
     public static float GetMaxRayLength(float distance) => Mathf.Min(distance, 10000);
